@@ -30,8 +30,7 @@ var path = {
 		css: './public/css/',
 		img: './public/img/',
 		fonts: './public/fonts/',
-		php: './public/php/',
-		jivosite: './public/jivosite/'
+		php: './public/php/'
 	},
 	dev: { //Пути откуда брать исходники
 		html: './dev/*.html', //Синтаксис src/*.html говорит gulp что мы хотим взять все файлы с расширением .html
@@ -42,8 +41,7 @@ var path = {
 		php: './dev/php/**/*.*',
 		fonts: './dev/fonts/*',
 		utility: ['./dev/utility_files/*', './dev/utility_files/.htaccess'],
-		img: './dev/img/**/*.*', //Синтаксис img/**/*.* означает - взять все файлы всех расширений из папки и из вложенных каталогов
-		jivosite: './dev/jivosite/**/*.*'
+		img: './dev/img/**/*.*' //Синтаксис img/**/*.* означает - взять все файлы всех расширений из папки и из вложенных каталогов
 	},
 	clean: './public',
 	hosttesting: {
@@ -169,11 +167,6 @@ gulp.task('utility', function() {
 		.pipe(gulp.dest(path.public.public));
 });
 
-gulp.task('jivosite', function() {
-	gulp.src(path.dev.jivosite)
-		.pipe(gulp.dest(path.public.jivosite));
-});
-
 gulp.task('webserver', function () {
 	browserSync(config);
 });
@@ -184,7 +177,7 @@ gulp.task('clean', function (cb) {
 
 gulp.task('l', ['html', 'css']);
 
-gulp.task('default', ['html', 'css', 'js', 'image', 'php', 'utility', 'fonts', 'jivosite']);
+gulp.task('default', ['html', 'css', 'js', 'image', 'php', 'utility', 'fonts']);
 
 /*----------*/
 gulp.task('cleanHost', function (cb) {

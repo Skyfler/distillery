@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css?family=Oswald:200,400&subset=cyrillic');
+
+@font-face {
+	font-family: 'Old Standard TT';
+	src: url('../fonts/oldstandard-bold-webfont.eot');
+	src: url('../fonts/oldstandard-bold-webfont.eot?#iefix') format('embedded-opentype'),
+		 url('../fonts/oldstandard-bold-webfont.woff2') format('woff2'),
+		 url('../fonts/oldstandard-bold-webfont.woff') format('woff'),
+		 url('../fonts/oldstandard-bold-webfont.ttf') format('truetype');
+	font-weight: 700;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Old Standard TT';
+	src: url('../fonts/oldstandard-italic-webfont.eot');
+	src: url('../fonts/oldstandard-italic-webfont.eot?#iefix') format('embedded-opentype'),
+		 url('../fonts/oldstandard-italic-webfont.woff2') format('woff2'),
+		 url('../fonts/oldstandard-italic-webfont.woff') format('woff'),
+		 url('../fonts/oldstandard-italic-webfont.ttf') format('truetype');
+	font-weight: normal;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: 'Old Standard TT';
+	src: url('../fonts/oldstandard-regular-webfont.eot');
+	src: url('../fonts/oldstandard-regular-webfont.eot?#iefix') format('embedded-opentype'),
+		 url('../fonts/oldstandard-regular-webfont.woff2') format('woff2'),
+		 url('../fonts/oldstandard-regular-webfont.woff') format('woff'),
+		 url('../fonts/oldstandard-regular-webfont.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Kameron';
+	src: url('../fonts/kameron-regular-webfont.eot');
+	src: url('../fonts/kameron-regular-webfont.eot?#iefix') format('embedded-opentype'),
+		 url('../fonts/kameron-regular-webfont.woff2') format('woff2'),
+		 url('../fonts/kameron-regular-webfont.woff') format('woff'),
+		 url('../fonts/kameron-regular-webfont.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Kameron';
+	src: url('../fonts/kameron-bold-webfont.eot');
+	src: url('../fonts/kameron-bold-webfont.eot?#iefix') format('embedded-opentype'),
+		 url('../fonts/kameron-bold-webfont.woff2') format('woff2'),
+		 url('../fonts/kameron-bold-webfont.woff') format('woff'),
+		 url('../fonts/kameron-bold-webfont.ttf') format('truetype');
+	font-weight: 700;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Kurale';
+	src: url('../fonts/kurale-regular-webfont.eot');
+	src: url('../fonts/kurale-regular-webfont.eot?#iefix') format('embedded-opentype'),
+		 url('../fonts/kurale-regular-webfont.woff2') format('woff2'),
+		 url('../fonts/kurale-regular-webfont.woff') format('woff'),
+		 url('../fonts/kurale-regular-webfont.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
