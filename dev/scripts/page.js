@@ -22,21 +22,40 @@
 		var scrollScreenPage = new ScrollScreenPage({
 			elem: scrollScreenPageElem,
 			animationDuration: 1000,
-			slidePartsBreakpoint: 1200
+			slidePartsBreakpoint: 1200,
+			widthCancelModesArr: [],
+			widthActiveModesArr: ['xs', 'sm', 'md', 'lg']
 		});
 
-		var pageSlideNumbering = new PageSlideNumbering({
-			elem: scrollScreenPageElem
-		});
+//		var pageSlideNumbering = new PageSlideNumbering({
+//			elem: scrollScreenPageElem
+//		});
 	}
 
 	var introElem = document.querySelector('#intro');
 	if (introElem) {
 		var firstSlide = new FirstSlideIntro({
 			elem: introElem,
-			intro1Elem: introElem.querySelector('.logo_2'),
-			intro2Elem1: introElem,
-			intro2Elem2: introElem.querySelector('.intro_logo_container')
+//			intro1Elem: introElem.querySelector('.logo_2'),
+			introElem1: introElem,
+			introElem2: introElem.querySelector('.intro_logo_container'),
+			introElem3: introElem.querySelector('.top'),
+			introElem4: introElem.querySelector('.bottom'),
+			introElem5: introElem.querySelector('.hidden_logo_container'),
+			logoElems: [
+				introElem.querySelector('.logo_1'),
+				introElem.querySelector('.logo_2'),
+				introElem.querySelector('.logo_3'),
+				introElem.querySelector('.logo_4')
+			],
+			scrollIcon: introElem.querySelector('.scroll_icon'),
+			smallLogoUrls: [
+				'img/logo_sm_part_1.png',
+				'img/logo_sm_part_2.png',
+				'img/logo_sm_part_3.png',
+				'img/logo_sm_part_4.png'
+			],
+			animationDuration: 500
 		});
 	}
 

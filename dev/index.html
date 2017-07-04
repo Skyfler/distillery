@@ -5,7 +5,7 @@
 	<meta name="viewport"
 		  content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>Document</title>
+	<title>Distllery</title>
 	<link rel="stylesheet" href="css/stylesheet.min.css">
 	<!--[if IE 7]>
 	<link type="text/css" rel="stylesheet" href="css/font-awesome-ie7.min.css">
@@ -17,49 +17,82 @@
 </head>
 <body>
 	<div id="intro" class="intro">
-		<a href="/" class="intro_logo_container">
-			<img src="img/logo.png" alt="" class="responsive_img logo_1">
-			<img src="img/logo_part_2.png" alt="" class="responsive_img logo_2">
-		</a>
+		<div class="scroll_icon">
+			Листайте вниз
+		</div>
+		<div class="top">
+			<a href="/" class="intro_logo_container">
+				<img src="img/logo_lg_part_1.png" alt="" class="responsive_img logo_1">
+				<span class="hidden_logo_container">
+					<img src="img/logo_lg_part_2.png" alt="" class="responsive_img logo_2">
+					<img src="img/logo_lg_part_3.png" alt="" class="responsive_img logo_3">
+					<img src="img/logo_lg_part_4.png" alt="" class="responsive_img logo_4">
+				</span>
+				<span class="logo_mobile">North Way</span>
+			</a>
+		</div>
+		<div class="bottom"></div>
 	</div>
+	@@include(
+		'./include/side_menu.html',
+		{ "sideMenu": {
+			"Главная": {"slide": "slide1", "class": "li_slide1"},
+			"Вторая": {"slide": "slide2", "class": "li_slide2"},
+			"Третья": {"slide": "slide3", "class": "li_slide3"},
+			"Четвертая": {"slide": "slide4", "class": "li_slide4"},
+			"Пятая": {"slide": "slide5", "class": "li_slide5"},
+			"Шестая": {"slide": "slide6", "class": "li_slide6"}
+		} }
+	)
 	<div id="page_scroller">
 		<div class="page_slide_container">
-			<section class="course_description page_slide" id="course_description">
-				<div class="container page_slide_inner_container course_description_inner_container flex flex-center-v">
+			<section class="course_description page_slide slide1" id="slide1">
+				<div class="sidebar">
+					<div class="scroll_icon">
+						Листайте вниз
+					</div>
+				</div>
+				<div class="page_slide_inner_container course_description_inner_container flex flex-center-v">
 					<div class="page_slide_content">
-						SLIDE 1
+						<div class="text_block">
+							<h4 class="block_main_title">Слоганище здоровенное</h4>
+							<div class="text">
+								перегонка, испарение жидкости с последующим охлаждением и конденсацией паров. Различают дистилляцию с конденсацией пара в жидкость и дистиляцию с конденсацией пара в твердую фазу (в конденсате возникает распредение концентрации компонентов)
+							</div>
+							<button class="order">заказать</button>
+						</div>
 					</div>
 				</div>
 			</section>
-			<section class="course_description page_slide" id="course_description">
+			<section class="course_description page_slide" id="slide2">
 				<div class="container page_slide_inner_container course_description_inner_container flex flex-center-v">
 					<div class="page_slide_content">
 						SLIDE 2
 					</div>
 				</div>
 			</section>
-			<section class="course_description page_slide" id="course_description">
+			<section class="course_description page_slide" id="slide3">
 				<div class="container page_slide_inner_container course_description_inner_container flex flex-center-v">
 					<div class="page_slide_content">
 						SLIDE 3
 					</div>
 				</div>
 			</section>
-			<section class="course_description page_slide" id="course_description">
+			<section class="course_description page_slide" id="slide4">
 				<div class="container page_slide_inner_container course_description_inner_container flex flex-center-v">
 					<div class="page_slide_content">
 						SLIDE 4
 					</div>
 				</div>
 			</section>
-			<section class="course_description page_slide" id="course_description">
+			<section class="course_description page_slide" id="slide5">
 				<div class="container page_slide_inner_container course_description_inner_container flex flex-center-v">
 					<div class="page_slide_content">
 						SLIDE 5
 					</div>
 				</div>
 			</section>
-			<section class="course_description page_slide" id="course_description">
+			<section class="course_description page_slide" id="slide6">
 				<div class="container page_slide_inner_container course_description_inner_container flex flex-center-v">
 					<div class="page_slide_content">
 						SLIDE 6

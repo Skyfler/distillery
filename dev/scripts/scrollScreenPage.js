@@ -14,6 +14,8 @@ function ScrollScreenPage(options) {
 	this._elem = options.elem;
 	this._animationDuration = options.animationDuration || 300;
 	this._pageSlideHeightString = options.pageSlideHeightString;
+	this._widthCancelModesArr = options.widthCancelModesArr;
+	this._widthActiveModesArr = options.widthActiveModesArr;
 	this._slidePartsBreakpoint = options.slidePartsBreakpoint || 1200;
 
 	this._onMouseWheel = this._onMouseWheel.bind(this);
@@ -22,6 +24,9 @@ function ScrollScreenPage(options) {
 	this._onClick = this._onClick.bind(this);
 	this._preventArrowsScroll = this._preventArrowsScroll.bind(this);
 	this._onFirstSlideIntro = this._onFirstSlideIntro.bind(this);
+	this._onTouchStart = this._onTouchStart.bind(this);
+	this._onTouchMove = this._onTouchMove.bind(this);
+	this._onTouchEnd = this._onTouchEnd.bind(this);
 
 	this._init();
 }
@@ -32,7 +37,8 @@ ScrollScreenPage.prototype.constructor = ScrollScreenPage;
 ScrollScreenPage.prototype._init = function() {
 	this._addListener(window, 'resize', this._onResize);
 
-	if (this._checkScreenWidth() === 'xs' || this._checkScreenWidth() === 'sm'  || this._checkScreenWidth() === 'md') { return; }
+//	if (this._checkScreenWidth() === 'xs' || this._checkScreenWidth() === 'sm'  || this._checkScreenWidth() === 'md') { return; }
+	if (this._widthCancelModesArr.indexOf(this._checkScreenWidth()) !== -1) { return; }
 
 	document.scrollTop = 0;
 	document.body.scrollTop = 0;
@@ -65,6 +71,7 @@ ScrollScreenPage.prototype._init = function() {
 	});
 
 	this._addListener(window, 'wheel', this._onMouseWheel);
+	this._addListener(document, 'touchstart', this._onTouchStart);
 	this._addListener(document, 'mousemove', this._onMouseMove);
 	this._addListener(document, 'click', this._onClick);
 	/*Preventing scroll with arrows in FF*/
@@ -187,6 +194,60 @@ ScrollScreenPage.prototype._onMouseWheel = function(e) {
 	}
 };
 
+ScrollScreenPage.prototype._onTouchStart = function(e) {
+	this._startDrag(e);
+};
+
+ScrollScreenPage.prototype._onTouchMove = function(e) {
+	this._onTouchMoveDrag(e);
+};
+
+ScrollScreenPage.prototype._onTouchEnd = function(e) {
+	this._onTouchEndDrag(e);
+};
+
+ScrollScreenPage.prototype._startDrag = function(e) {
+	var target = e.target;
+	if (!target || !target.closest || this._firstSlideIntro) return;
+
+	var noPageScrollArea = target.closest('[data-no-page-scroll-area="true"]');
+	if (noPageScrollArea) { return }
+
+	this._removeListener(document, 'touchstart', this._onTouchStart);
+
+	var clientY = (e.clientY === undefined) ? e.changedTouches[0].clientY : e.clientY;
+	this._prevCursorYPosition = clientY + (window.pageYOffset || document.documentElement.scrollTop);
+
+	this._addListener(document, 'touchmove', this._onTouchMove);
+	this._addListener(document, 'touchend', this._onTouchEnd);
+};
+
+ScrollScreenPage.prototype._onTouchMoveDrag = function(e) {
+	var clientY = (e.clientY === undefined) ? e.changedTouches[0].clientY : e.clientY;
+	var currentcursorYPosition = clientY + (window.pageYOffset || document.documentElement.scrollTop);
+	var yPositionDeleta = currentcursorYPosition - this._prevCursorYPosition;
+
+//	this._playIntro(-yPositionDeleta * 0.25);
+	if (!this._scrollInProcess) {
+		if (yPositionDeleta > 0) {
+			this._scrollPageUp();
+
+		} else if (yPositionDeleta < 0) {
+			this._scrollPageDown();
+
+		}
+	}
+
+	this._prevCursorYPosition = currentcursorYPosition;
+};
+
+ScrollScreenPage.prototype._onTouchEndDrag = function(e) {
+	this._removeListener(document, 'touchmove', this._onTouchMove);
+	this._removeListener(document, 'touchend', this._onTouchEnd);
+
+	this._addListener(document, 'touchstart', this._onTouchStart);
+};
+
 ScrollScreenPage.prototype._onClick = function(e) {
 	var target = e.target;
 
@@ -226,10 +287,11 @@ ScrollScreenPage.prototype._scrollToTargetSlide = function(target) {
 };
 
 ScrollScreenPage.prototype._onResize = function() {
-	if ((this._checkScreenWidth() === 'xs' || this._checkScreenWidth() === 'sm'  || this._checkScreenWidth() === 'md')  && this._initialized) {
+//	if ((this._checkScreenWidth() === 'xs' || this._checkScreenWidth() === 'sm'  || this._checkScreenWidth() === 'md')  && this._initialized) {
+	if (this._widthCancelModesArr.indexOf(this._checkScreenWidth()) !== -1  && this._initialized) {
 		this._cancelScrollScreenPage();
 
-	} else if ((this._checkScreenWidth() === 'lg') && !this._initialized)  {
+	} else if (this._widthActiveModesArr.indexOf(this._checkScreenWidth()) !== -1 && !this._initialized)  {
 		this._init();
 
 	} else if (this._initialized) {

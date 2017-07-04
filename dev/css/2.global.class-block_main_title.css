@@ -1,0 +1,15 @@
+.block_main_title {
+	font-family: 'Oswald', sans-serif;
+	font-size: 36px;
+	color: #f2b270;
+	font-weight: 400;
+/*	font-style: italic;*/
+}
+
+@media screen and (max-width: 991px) {
+
+	.block_main_title {
+		line-height: 1.1;
+	}
+
+}

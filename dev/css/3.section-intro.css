@@ -4,7 +4,55 @@
 	height: 100%;
 	top: 0;
 	left: 0;
-	z-index: 1;
+	z-index: 2;
+}
+
+.intro .scroll_icon {
+	position: absolute;
+	bottom: 62px;
+/*	left: calc(50% - 12px);*/
+	left: 0;
+	right: 0;
+	margin: 0 auto;
+	opacity: 0;
+	font-family: 'Oswald', sans-serif;
+	color: #f2b270;
+	font-weight: 200;
+	font-size: 16px;
+	letter-spacing: 0.05em;
+	text-align: center;
+}
+
+.intro .scroll_icon:after {
+	content: "";
+	display: block;
+	width: 24px;
+	height: 66px;
+	margin: 15px auto 0;
+	background-image: url(../img/icon_scroll.png);
+	background-position: center center;
+	background-repeat: no-repeat;
+}
+body.intro_complete .intro .scroll_icon {
+	display: none;
+}
+
+.intro .top {
+	width: 100%;
+	height: 80px;
+	background: #000;
+	position: fixed;
+	left: 0;
+	top: 0;
+}
+
+.intro .bottom {
+	width: 100%;
+	height: 52px;
+	background: #000;
+	position: fixed;
+	left: 0;
+	bottom: 0;
 }
 
 .intro .intro_logo_container {
@@ -12,15 +60,47 @@
 	width: 400px;
 	top: 0;
 	left: 0;
-	left: 0;
-	right: 0;
-	margin: 0 auto;
+/*	right: 0;*/
+/*	margin: 0 auto;*/
 	display: block;
 }
 
-.intro .logo_2 {
+.intro .intro_logo_container img {
 	opacity: 0;
+}
+
+.intro .intro_logo_container .logo_mobile {
+	font-size: 27px;
+	position: absolute;
+	white-space: nowrap;
+	top: 0;
+	left: calc(100% - 20px);
+	display: none;
+	font-family: 'Kurale', serif;
+	color: #f2b270;
+	text-transform: uppercase;
+}
+
+.intro .hidden_logo_container {
+	display: block;
 	position: absolute;
 	top: 100%;
 	left: 0;
+	overflow: hidden;
+}
+
+@media screen and (max-width: 991px) {
+
+	body.intro_complete .intro .intro_logo_container .logo_mobile {
+		display: block;
+	}
+
+}
+
+@media screen and (min-width: 992px) {
+
+	.intro .top {
+		height: 100px;
+	}
+
 }
