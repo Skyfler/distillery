@@ -89,9 +89,63 @@ body.intro_complete .intro .scroll_icon {
 	overflow: hidden;
 }
 
+.intro .menu_button {
+	display: none;
+	border: 1px solid #f2b270;
+	background: none;
+	height: 32px;
+	width: 32px;
+	position: absolute;
+	top: 25px;
+	right: 35px;
+	transform: rotate(45deg);
+	overflow: hidden;
+}
+
+.intro .menu_button .center_icon {
+	display: block;
+	width: 15px;
+	height: 15px;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	margin: auto auto;
+	position: absolute;
+	transform: rotate(-45deg);
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.intro .menu_button .center_icon .line {
+	width: 100%;
+	border-bottom: 1px solid #f2b270;
+	display: block;
+	transform-origin: center center;
+	transition:
+		opacity ease 0.5s,
+		transform ease 0.5s;
+}
+.intro .menu_button .center_icon .line + .line {
+	margin-top: 5px;
+}
+.intro .menu_button.open .center_icon .line:nth-child(1) {
+	transform: translateY(6px) rotate(45deg);
+}
+.intro .menu_button.open .center_icon .line:nth-child(2) {
+	transform: rotate(-45deg);
+}
+.intro .menu_button.open .center_icon .line:nth-child(3) {
+	opacity: 0;
+}
+
 @media screen and (max-width: 991px) {
 
 	body.intro_complete .intro .intro_logo_container .logo_mobile {
+		display: block;
+	}
+
+	body.intro_complete .intro .menu_button {
 		display: block;
 	}
 

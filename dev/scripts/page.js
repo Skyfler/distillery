@@ -9,13 +9,22 @@
 	var ScrollToSlide = require('./scrollToSlide');
 	var ContactFormController = require('./contactFormController');
 	var FirstSlideIntro = require('./firstSlideIntro');
+	var SideMenu = require('./sideMenu');
 
 	_polyfills.init();
 	_extendStandartPrototypes.init();
 
-	var scrollToSlide = new ScrollToSlide({
-		scrollDuration: 600
-	});
+	var sideMenuElem = document.querySelector('.side_menu');
+	if (sideMenuElem) {
+		var sideMenu = new SideMenu({
+			elem: sideMenuElem,
+			menuButton: document.querySelector('.menu_button')
+		});
+	}
+
+//	var scrollToSlide = new ScrollToSlide({
+//		scrollDuration: 600
+//	});
 
 	var scrollScreenPageElem = document.querySelector('#page_scroller');
 	if (scrollScreenPageElem) {

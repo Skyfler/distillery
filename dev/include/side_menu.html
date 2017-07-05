@@ -1,11 +1,13 @@
 <nav class="side_menu">
 	@@if (sideMenu) {
-		<div class="flex flex-center-v">
+		<div class="side_menu_inner flex flex-center-v">
 			<div class="side_menu_container">
 				<ul class="side_menu_list flex-nowrap">
 					@@foreach (sideMenu) {
 						<li class="side_menu_list_item flex flex-center-v flex-center-h @@class" data-slide="@@slide">
-							<div class="side_menu_list_item_inner"></div>
+							<div class="side_menu_list_item_inner">
+								<div class="line"></div>
+							</div>
 							<div class="title">@@index</div>
 						</li>
 					}

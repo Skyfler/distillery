@@ -1,17 +1,24 @@
 "use strict";
 
-var Helper = require('./helper');
-var Animation = require('./animation');
+try {
+	var Helper = require('./helper');
+	var Animation = require('./animation');
+} catch (err) {
+	console.warn(err);
+}
 
 function SideMenu(options) {
 	options.name = options.name || 'SideMenu';
 	Helper.call(this, options);
 
 	this._elem = options.elem;
+	this._menuButton = options.menuButton;
+	this._activeClass = options.activeClass || 'active';
 	this._animationDuration = options.animationDuration || 500;
 
 	this._onPageSlideChanged = this._onPageSlideChanged.bind(this);
 	this._onResize = this._onResize.bind(this);
+	this._onClick = this._onClick.bind(this);
 
 	this._init();
 }
@@ -22,7 +29,14 @@ SideMenu.prototype.constructor = SideMenu;
 SideMenu.prototype._init = function() {
 	this._listItemsArr = this._elem.querySelectorAll('.side_menu_list_item');
 	this._listItemsCount = this._listItemsArr.length;
-	this._sliderElem = this._elem.querySelector('.slider_elem');
+	this._overflowContainer = this._elem.querySelector('.side_menu_container');
+	this._dropdownState = 'inactive';
+
+	if (['xs', 'sm'].indexOf(this._checkScreenWidth() !== -1)) {
+		this._initDropdownOnMobile();
+	}
+
+	this._controllLineHeight();
 
 	this._addListener(document, 'pageSlideChanged', this._onPageSlideChanged);
 	this._addListener(window, 'resize', this._onResize);
@@ -55,6 +69,113 @@ SideMenu.prototype._onPageSlideChanged = function(e) {
 	}
 };
 
+SideMenu.prototype._initDropdownOnMobile = function() {
+	this._overflowContainer.style.height = 0;
+	this._menuButton.classList.remove(this._activeClass);
+	this._addListener(this._menuButton, 'click', this._onClick);
+	this._dropdownState = 'closed';
+};
+
+SideMenu.prototype._cancelDropdownOnMobile = function() {
+	this._overflowContainer.style.height = '';
+	this._menuButton.classList.remove(this._activeClass);
+	this._removeListener(this._menuButton, 'click', this._onClick);
+	this._dropdownState = 'inactive';
+
+	if (this._dropdownAnimation) {
+		this._dropdownAnimation.stop();
+		delete this._dropdownAnimation;
+	}
+};
+
+SideMenu.prototype._onClick = function(e) {
+	this._toggleMenu();
+};
+
+SideMenu.prototype._toggleMenu = function() {
+	if (this._dropdownState === 'closed') {
+		this._openMenu();
+	} else if (this._dropdownState === 'open') {
+		this._closeMenu();
+	}
+};
+
+SideMenu.prototype._openMenu = function() {
+	this._dropdownState = 'open';
+
+	if (this._dropdownAnimation) {
+		this._dropdownAnimation.stop();
+		delete this._dropdownAnimation;
+	}
+
+	this._menuButton.classList.add(this._activeClass);
+
+	this._animationData = {
+		start: this._overflowContainer.offsetHeight,
+		end: this._overflowContainer.querySelector('.side_menu_list').offsetHeight
+	};
+
+	this._dropdownAnimation = new Animation(
+		this._dropdownDraw.bind(this),
+		this._animationDuration,
+		function(){
+			delete this._dropdownAnimation;
+			delete this._animationData;
+		}.bind(this)
+	);
+};
+
+SideMenu.prototype._closeMenu = function() {
+	this._dropdownState = 'closed';
+
+	if (this._dropdownAnimation) {
+		this._dropdownAnimation.stop();
+		delete this._dropdownAnimation;
+	}
+
+	this._menuButton.classList.remove(this._activeClass);
+
+	this._animationData = {
+		start: this._overflowContainer.offsetHeight,
+		end: 0
+	};
+
+	this._dropdownAnimation = new Animation(
+		this._dropdownDraw.bind(this),
+		this._animationDuration,
+		function(){
+			delete this._dropdownAnimation;
+			delete this._animationData;
+		}.bind(this)
+	);
+};
+
+SideMenu.prototype._dropdownDraw = function(timePassed) {
+	var timeMuliplier = Animation.quadEaseInOut(this._animationDuration, timePassed);
+	var height = this._animationData.start + (this._animationData.end - this._animationData.start) * timeMuliplier;
+
+	this._overflowContainer.style.height = height + 'px';
+};
+
+SideMenu.prototype._controllLineHeight = function() {
+	var prevElem, line, height;
+	for (var i = 0; i < this._listItemsCount; i++) {
+		line = this._listItemsArr[i].querySelector('.line');
+		prevElem = this._listItemsArr[i - 1] ? this._listItemsArr[i - 1] : this._menuButton;
+		height = this._calculateLineHeight(this._listItemsArr[i], prevElem);
+		line.style.height = height  + 'px';
+	}
+};
+
+SideMenu.prototype._calculateLineHeight = function(elem, prevElem) {
+	var elemRect = elem.getBoundingClientRect();
+	var prevElemRect = prevElem.getBoundingClientRect();
+
+	var diff = elemRect.top - prevElemRect.bottom - 20;
+
+	return diff;
+};
+
 SideMenu.prototype._setActiveListItem = function(activeListItem) {
 	if (this._activeListItem) {
 		this._activeListItem.classList.remove('active');
@@ -62,57 +183,29 @@ SideMenu.prototype._setActiveListItem = function(activeListItem) {
 	activeListItem.classList.add('active');
 	this._activeListItem = activeListItem;
 
-	if (this._checkScreenWidth() === 'xs' || this._checkScreenWidth() === 'sm'  || this._checkScreenWidth() === 'md') return;
-	this._controllSliderElem();
-};
-
-SideMenu.prototype._controllSliderElem = function() {
-	var startTop = this._sliderElem.offsetTop,
-		startHeight = this._sliderElem.offsetHeight;
-
-	this._endTop = this._activeListItem.offsetTop;
-	this._endHeight = this._activeListItem.offsetHeight;
-
-
-	if (this._currentAnimation) {
-		this._currentAnimation.stop();
-	}
-
-	this._currentAnimation = new Animation(
-		function(timePassed) {
-//			var timeMultiplier = (timePassed / (this._animationDuration / 100)) / 100;
-			var timeMultiplier = Animation.quadEaseInOut(this._animationDuration, timePassed);
-			var curTop = startTop + ((this._endTop - startTop) * timeMultiplier);
-			var curHeight = startHeight + ((this._endHeight - startHeight) * timeMultiplier);
-
-			this._sliderElem.style.top = curTop + 'px';
-			this._sliderElem.style.height = curHeight + 'px';
-		}.bind(this),
-		this._animationDuration,
-		function() {
-			delete this._endTop;
-			delete this._endHeight;
-			delete this._currentAnimation;
-		}.bind(this)
-	);
+//	if (this._checkScreenWidth() === 'xs' || this._checkScreenWidth() === 'sm'  || this._checkScreenWidth() === 'md') return;
 };
 
 SideMenu.prototype._onResize = function() {
-	if (this._checkScreenWidth() === 'xs' || this._checkScreenWidth() === 'sm'  || this._checkScreenWidth() === 'md') return;
+//	if (this._checkScreenWidth() === 'xs' || this._checkScreenWidth() === 'sm'  || this._checkScreenWidth() === 'md') return;
 
 	if (!this._activeListItem) {
 		this._setActiveListItem(this._listItemsArr[0]);
 	}
 
-	if (this._currentAnimation) {
-		this._endTop = this._activeListItem.offsetTop;
-		this._endHeight = this._activeListItem.offsetHeight;
-
-	} else {
-		this._sliderElem.style.top = this._activeListItem.offsetTop + 'px';
-		this._sliderElem.style.height = this._activeListItem.offsetHeight + 'px';
-
+	if (['xs', 'sm'].indexOf(this._checkScreenWidth()) !== -1 && this._dropdownState === 'inactive') {
+		this._initDropdownOnMobile();
+	} else if (['xs', 'sm'].indexOf(this._checkScreenWidth()) === -1 && this._dropdownState !== 'inactive') {
+		this._cancelDropdownOnMobile();
+	} else if (this._dropdownState === 'open') {
+		this._toggleMenu();
 	}
+
+	this._controllLineHeight();
 };
 
-module.exports = SideMenu;
+try {
+	module.exports = SideMenu;
+} catch (err) {
+	console.warn(err);
+}
