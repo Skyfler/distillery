@@ -38,7 +38,11 @@
 				</span>
 			</button>
 		</div>
-		<div class="bottom"></div>
+		<div class="bottom">
+			<div class="slider_dot_controlls flex flex-center-h flex-center-v hidden">
+				<ul class="slider_dot_controlls_list flex-nowrap flex-nowrap flex-center-v"></ul>
+			</div>
+		</div>
 	</div>
 	@@include(
 		'./include/side_menu.html',
@@ -47,19 +51,18 @@
 			"Вторая": {"slide": "slide2", "class": "li_slide2"},
 			"Третья": {"slide": "slide3", "class": "li_slide3"},
 			"Четвертая": {"slide": "slide4", "class": "li_slide4"},
-			"Пятая": {"slide": "slide5", "class": "li_slide5"},
-			"Шестая": {"slide": "slide6", "class": "li_slide6"}
+			"Пятая": {"slide": "slide5", "class": "li_slide5"}
 		} }
 	)
 	<div id="page_scroller">
 		<div class="page_slide_container">
-			<section class="course_description page_slide slide1" id="slide1">
+			<section class="page_slide slide1" id="slide1">
 				<div class="sidebar">
 					<div class="scroll_icon">
 						Листайте вниз
 					</div>
 				</div>
-				<div class="page_slide_inner_container course_description_inner_container flex flex-center-v">
+				<div class="page_slide_inner_container flex flex-center-v">
 					<div class="page_slide_content">
 						<div class="text_block">
 							<h4 class="block_main_title">Слоганище здоровенное</h4>
@@ -71,41 +74,94 @@
 					</div>
 				</div>
 			</section>
-			<section class="course_description page_slide" id="slide2">
-				<div class="container page_slide_inner_container course_description_inner_container flex flex-center-v">
+			<section class="page_slide slide2" id="slide2">
+				<div class="sidebar">
+					<div class="scroll_icon">
+						Листайте вниз
+					</div>
+				</div>
+				<div class="page_slide_inner_container flex flex-center-v">
 					<div class="page_slide_content">
-						SLIDE 2
+						<div class="text_block flex flex-center-v flex-center-h">
+							<h4 class="block_main_title">Зонная дистилляция</h4>
+							<div class="text">
+								Только благодаря нашим ультрасовременным вы сможете изготовить спиртное мирового уровня, не уступающего по качеству самым популярным торговым маркам
+							</div>
+						</div>
 					</div>
 				</div>
 			</section>
-			<section class="course_description page_slide" id="slide3">
-				<div class="container page_slide_inner_container course_description_inner_container flex flex-center-v">
+			<section class="page_slide slide3" id="slide3">
+				<div class="container page_slide_inner_container flex flex-center-v">
 					<div class="page_slide_content">
 						SLIDE 3
 					</div>
 				</div>
 			</section>
-			<section class="course_description page_slide" id="slide4">
-				<div class="container page_slide_inner_container course_description_inner_container flex flex-center-v">
-					<div class="page_slide_content">
-						SLIDE 4
+			<section class="page_slide slide4" id="slide4">
+				<div class="page_slide_inner_container flex flex-center-v">
+					<div class="page_slide_content flex flex-center-h">
+						<div class="slider" id="slider">
+							<div class="overflow_hidden_container">
+								<div class="overflow_block clr flex flex-center-v">
+									<div class="slider_slide" data-component="slide">
+										<div class="slider_slide_inner"></div>
+										<div class="slide_content">
+											<div class="text_block">
+												<div class="block_main_title">8. Разлив</div>
+												<div class="text">
+													Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam non veritatis facere, sit velit amet est voluptatem officiis perspiciatis, distinctio iusto eum, libero ipsum doloribus modi similique doloremque earum reiciendis.
+													Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad iste voluptas, eveniet laborum corrupti accusamus at voluptates vel soluta. Incidunt similique esse soluta, nesciunt at, odio quod corporis asperiores! Repudiandae!
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="slider_slide" data-component="slide">
+										<div class="slider_slide_inner"></div>
+										<div class="slide_content">
+											<div class="text_block">
+												<div class="block_main_title">8. Разлив</div>
+												<div class="text">
+													Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam non veritatis facere, sit velit amet est voluptatem officiis perspiciatis, distinctio iusto eum, libero ipsum doloribus modi similique doloremque earum reiciendis.
+													Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad iste voluptas, eveniet laborum corrupti accusamus at voluptates vel soluta. Incidunt similique esse soluta, nesciunt at, odio quod corporis asperiores! Repudiandae!
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="slider_slide" data-component="slide">
+										<div class="slider_slide_inner"></div>
+										<div class="slide_content">
+											<div class="text_block">
+												<div class="block_main_title">8. Разлив</div>
+												<div class="text">
+													Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam non veritatis facere, sit velit amet est voluptatem officiis perspiciatis, distinctio iusto eum, libero ipsum doloribus modi similique doloremque earum reiciendis.
+													Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad iste voluptas, eveniet laborum corrupti accusamus at voluptates vel soluta. Incidunt similique esse soluta, nesciunt at, odio quod corporis asperiores! Repudiandae!
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+					   </div>
 					</div>
 				</div>
 			</section>
-			<section class="course_description page_slide" id="slide5">
-				<div class="container page_slide_inner_container course_description_inner_container flex flex-center-v">
+			<section class="page_slide slide5" id="slide5">
+				<div class="container page_slide_inner_container flex flex-center-v">
 					<div class="page_slide_content">
 						SLIDE 5
 					</div>
 				</div>
 			</section>
-			<section class="course_description page_slide" id="slide6">
-				<div class="container page_slide_inner_container course_description_inner_container flex flex-center-v">
+<!--
+			<section class="page_slide slide6" id="slide6">
+				<div class="container page_slide_inner_container flex flex-center-v">
 					<div class="page_slide_content">
 						SLIDE 6
 					</div>
 				</div>
 			</section>
+-->
 		</div>
 	</div>
 <script src="scripts/build.min.js"></script>

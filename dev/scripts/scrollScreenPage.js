@@ -217,6 +217,7 @@ ScrollScreenPage.prototype._startDrag = function(e) {
 
 	var clientY = (e.clientY === undefined) ? e.changedTouches[0].clientY : e.clientY;
 	this._prevCursorYPosition = clientY + (window.pageYOffset || document.documentElement.scrollTop);
+	this._totalLength = 0;
 
 	this._addListener(document, 'touchmove', this._onTouchMove);
 	this._addListener(document, 'touchend', this._onTouchEnd);
@@ -227,8 +228,14 @@ ScrollScreenPage.prototype._onTouchMoveDrag = function(e) {
 	var currentcursorYPosition = clientY + (window.pageYOffset || document.documentElement.scrollTop);
 	var yPositionDeleta = currentcursorYPosition - this._prevCursorYPosition;
 
+	if ((this._totalLength > 0 && yPositionDeleta < 0) ||
+	   (this._totalLength < 0 && yPositionDeleta > 0)) {
+		this._totalLength = yPositionDeleta;
+	} else {
+		this._totalLength += yPositionDeleta;
+	}
 //	this._playIntro(-yPositionDeleta * 0.25);
-	if (!this._scrollInProcess) {
+	if (!this._scrollInProcess && Math.abs(this._totalLength) > 50) {
 		if (yPositionDeleta > 0) {
 			this._scrollPageUp();
 
@@ -236,6 +243,8 @@ ScrollScreenPage.prototype._onTouchMoveDrag = function(e) {
 			this._scrollPageDown();
 
 		}
+
+		this._totalLength = 0;
 	}
 
 	this._prevCursorYPosition = currentcursorYPosition;

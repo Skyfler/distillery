@@ -89,6 +89,22 @@ body.intro_complete .intro .scroll_icon {
 	overflow: hidden;
 }
 
+@media screen and (max-width: 991px) {
+
+	body.intro_complete .intro .intro_logo_container .logo_mobile {
+		display: block;
+	}
+
+}
+
+@media screen and (min-width: 992px) {
+
+	.intro .top {
+		height: 100px;
+	}
+
+}
+
 .intro .menu_button {
 	display: none;
 	border: 1px solid #f2b270;
@@ -141,20 +157,54 @@ body.intro_complete .intro .scroll_icon {
 
 @media screen and (max-width: 991px) {
 
-	body.intro_complete .intro .intro_logo_container .logo_mobile {
-		display: block;
-	}
-
 	body.intro_complete .intro .menu_button {
 		display: block;
 	}
 
 }
 
-@media screen and (min-width: 992px) {
+.intro .slider_dot_controlls {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	opacity: 0;
+}
 
-	.intro .top {
-		height: 100px;
-	}
+.intro .slider_dot_controlls li.slider_dot_controll {
+	cursor: pointer;
+	display: block;
+	width: 10px;
+	height: 10px;
+	transform: rotate(45deg);
+	transition: background-color ease 0.5s;
+}
+.intro .slider_dot_controlls li.slider_dot_controll.active {
+/*.intro .slider_dot_controlls li.slider_dot_controll:hover {*/
+	background: #f2b270;
+}
 
+.intro .slider_dot_controlls li.slider_dot_controll:before {
+	content: "";
+	display: block;
+	width: 100%;
+	height: 100%;
+	border: 1px solid #f2b270;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	transition:
+		width ease 0.5s,
+		height ease 0.5s;
+}
+.intro .slider_dot_controlls li.slider_dot_controll.active:before {
+/*.intro .slider_dot_controlls li.slider_dot_controll:hover:before {*/
+	width: calc(100% + 4px);
+	height: calc(100% + 4px);
+}
+
+.intro .slider_dot_controlls li.dot_controll_decoration {
+	border-bottom: 1px solid #f2b270;
+	margin: 0 10px;
+	width: 10px;
 }

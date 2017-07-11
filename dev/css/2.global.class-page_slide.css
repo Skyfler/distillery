@@ -23,6 +23,7 @@
 .page_slide .page_slide_content,
 .page_slide .page_slide_part_content {
 	width: 100%;
+	max-height: calc(100vh - 80px);
 }
 .page_slide.slide_init .page_slide_content,
 .page_slide .page_slide_part.slide_init .page_slide_part_content {
@@ -63,6 +64,11 @@ body.intro_complete .page_slide .page_slide_part.slide_init .page_slide_part_con
 	.page_slide .page_slide_inner_container,
 	.page_slide .page_slide_part_inner_container {
 /*		height: 100%;*/
+	}
+
+	.page_slide .page_slide_content,
+	.page_slide .page_slide_part_content {
+		max-height: calc(100vh - 100px);
 	}
 
 	.page_slide.slide_init .page_slide_content,

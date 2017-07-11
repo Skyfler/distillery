@@ -1,13 +1,17 @@
-.slide1 {
-	background-image: url(../img/slide_1_bg.jpg);
+.slide2 {
+	background-image: url(../img/slide_2_bg.jpeg);
 	background-size: auto 100%;
 	background-position: center center;
+}
+.slide2.page_slide.slide_init {
+	padding-top: 0;
+	padding-bottom: 0;
 }
 
 @media screen and (orientation: portrait) {
 
 /*
-	.slide1 {
+	.slide2 {
 		background-size: auto 100%;
 	}
 */
@@ -17,23 +21,22 @@
 @media screen and (orientation: landscape) {
 
 /*
-	.slide1 {
+	.slide2 {
 		background-size: 100% auto;
 	}
 */
 
 }
 
-@media screen and (min-aspect-ratio: 1400/790) {
+@media screen and (min-aspect-ratio: 1280/854) {
 
-	.slide1 {
+	.slide2 {
 		background-size: 100% auto;
 	}
 
 }
 
-
-.slide1 .sidebar {
+.slide2 .sidebar {
 	height: 100%;
 	width: 35px;
 	background: rgba(0, 0, 0, 0.9);
@@ -44,11 +47,11 @@
 	display: none;
 }
 
-body.intro_complete .slide1 .sidebar {
+body.intro_complete .slide2 .sidebar {
 	display: block;
 }
 
-.slide1 .scroll_icon {
+.slide2 .scroll_icon {
 	position: absolute;
 /*	left: calc(50% - 12px);*/
 	left: 0;
@@ -62,8 +65,9 @@ body.intro_complete .slide1 .sidebar {
 	letter-spacing: 0.05em;
 	text-align: center;
 	display: none;
+	transform: translateY(-50%);
 }
-.slide1 .scroll_icon:after {
+.slide2 .scroll_icon:after {
 	content: "";
 	display: block;
 	width: 24px;
@@ -74,32 +78,60 @@ body.intro_complete .slide1 .sidebar {
 	background-repeat: no-repeat;
 }
 
-.slide1 .text_block {
+.slide2 .page_slide_inner_container {
+	height: 100%;
+}
+
+.slide2 .page_slide_content {
+	height: 100%;
+}
+
+.slide2 .text_block {
 	background: rgba(0, 0, 0, 0.9);
-	padding: 40px;
+	padding-right: 40px;
+	padding-left: 40px;
+	padding-top: calc(40px + 80px);
+	padding-bottom: calc(40px + 52px);
 	border-right: 2px solid #f2b270;
 	position: relative;
 	max-width: calc(100vw - 70px);
 	margin-left: 35px;
+	height: 100%;
+	align-content: center;
+	text-align: center;
 }
 
-.slide1 .text_block:before {
-	content: "";
-	display: block;
-	position: absolute;
-/*	width: 100%;*/
-	width: calc(100% + 35px);
-	border-bottom: 2px solid #f2b270;
-	top: 0;
-	right: 0;
-}
-
-.slide1 .block_main_title {
+.slide2 .block_main_title {
 	font-size: 40px;
 	margin-bottom: 35px;
+	position: relative;
+	padding: 10px 20px;
 }
 
-.slide1 .text {
+.slide2 .block_main_title:before {
+	content: "";
+	display: block;
+	background: url(../img/icon_corner.png);
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 25px;
+	height: 25px;
+}
+
+.slide2 .block_main_title:after {
+	content: "";
+	display: block;
+	background: url(../img/icon_corner.png);
+	transform: rotate(180deg);
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	width: 25px;
+	height: 25px;
+}
+
+.slide2 .text {
 /*	font-family: 'Old Standard TT', serif;*/
 	color: #fff;
 	font-size: 16px;
@@ -108,33 +140,18 @@ body.intro_complete .slide1 .sidebar {
 	margin-bottom: 35px;
 }
 
-.slide1 .order {
-	display: inline-block;
-	width: 100%;
-	max-width: 166px;
-	background: none;
-	font-size: 16px;
-	color: #fff;
-	text-transform: uppercase;
-	font-family: 'Oswald', sans-serif;
-/*	font-style: italic;*/
-	letter-spacing: 0.05em;
-	border: 1px solid #f2b270;
-	padding: 12px 5px;
-}
-
 @media screen and (min-width: 768px) {
 
-	.slide1 .text_block {
-		max-width: 620px;
+	.slide2 .text_block {
+		max-width: 470px;
 	}
 
 }
 
 @media screen and (max-width: 991px) {
 
-	.slide1.page_slide.slide_init .page_slide_content,
-	.slide1.page_slide .page_slide_part.slide_init .page_slide_part_content {
+	.slide2.page_slide.slide_init .page_slide_content,
+	.slide2.page_slide .page_slide_part.slide_init .page_slide_part_content {
 		padding: 0;
 	}
 
@@ -142,21 +159,19 @@ body.intro_complete .slide1 .sidebar {
 
 @media screen and (min-width: 992px) {
 
-	.slide1 .sidebar {
+	.slide2 .sidebar {
 		width: 100px;
 	}
 
-	.slide1 .scroll_icon {
+	.slide2 .scroll_icon {
 		display: block;
 	}
 
-	.slide1 .text_block {
-		margin-top: 100px;
+	.slide2 .text_block {
+/*		margin-top: 100px;*/
 		margin-left: 100px;
-	}
-
-	.slide1 .text_block:before {
-		width: calc(100% + 100px);
+		padding-top: calc(40px + 100px);
+		padding-bottom: calc(40px + 52px);
 	}
 
 }

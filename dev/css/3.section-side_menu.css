@@ -1,5 +1,5 @@
 .side_menu {
-	height: 100%;
+/*	height: 100%;*/
 	position: fixed;
 	top: 0;
 	z-index: 1;
@@ -116,7 +116,7 @@
 		opacity: 0;
 		transition: opacity ease 0.5s;
 	}
-	.side_menu .side_menu_list_item:hover .side_menu_list_item_inner:before,
+/*	.side_menu .side_menu_list_item:hover .side_menu_list_item_inner:before,*/
 	.side_menu .side_menu_list_item.active .side_menu_list_item_inner:before {
 		opacity: 1;
 	}
@@ -139,7 +139,7 @@
 			height ease 0.5s;
 		will-change: width, height;
 	}
-	.side_menu .side_menu_list_item:hover .side_menu_list_item_inner:after,
+/*	.side_menu .side_menu_list_item:hover .side_menu_list_item_inner:after,*/
 	.side_menu .side_menu_list_item.active .side_menu_list_item_inner:after {
 		width: calc(100% + 15px);
 		height: calc(100% + 15px);

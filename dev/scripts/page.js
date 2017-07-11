@@ -10,6 +10,7 @@
 	var ContactFormController = require('./contactFormController');
 	var FirstSlideIntro = require('./firstSlideIntro');
 	var SideMenu = require('./sideMenu');
+	var Slider = require('./slider');
 
 	_polyfills.init();
 	_extendStandartPrototypes.init();
@@ -77,6 +78,15 @@
 				'<p>Ваша заявка принята!</p>' +
 				'<p>Наши менеджеры свяжутся с вами в ближайшее время ;)</p>' +
 				'</div>'
+		});
+	}
+
+	var sliderElem = document.querySelector('#slider');
+	if (sliderElem) {
+		window.slider = new Slider({
+			elem: sliderElem,
+			delay: 0,
+			controllsElem: document.querySelector('.slider_dot_controlls')
 		});
 	}
 
