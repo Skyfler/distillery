@@ -17,8 +17,9 @@ function SideMenu(options) {
 	this._animationDuration = options.animationDuration || 500;
 
 	this._onPageSlideChanged = this._onPageSlideChanged.bind(this);
+	this._onPageSlideChangedDropdownActive = this._onPageSlideChangedDropdownActive.bind(this);
 	this._onResize = this._onResize.bind(this);
-	this._onClick = this._onClick.bind(this);
+	this._onMenuBtnClick = this._onMenuBtnClick.bind(this);
 
 	this._init();
 }
@@ -72,14 +73,16 @@ SideMenu.prototype._onPageSlideChanged = function(e) {
 SideMenu.prototype._initDropdownOnMobile = function() {
 	this._overflowContainer.style.height = 0;
 	this._menuButton.classList.remove(this._activeClass);
-	this._addListener(this._menuButton, 'click', this._onClick);
+	this._addListener(this._menuButton, 'click', this._onMenuBtnClick);
+	this._addListener(document, 'pageSlideChanged', this._onPageSlideChangedDropdownActive);
 	this._dropdownState = 'closed';
 };
 
 SideMenu.prototype._cancelDropdownOnMobile = function() {
 	this._overflowContainer.style.height = '';
 	this._menuButton.classList.remove(this._activeClass);
-	this._removeListener(this._menuButton, 'click', this._onClick);
+	this._removeListener(this._menuButton, 'click', this._onMenuBtnClick);
+	this._removeListener(document, 'pageSlideChanged', this._onPageSlideChangedDropdownActive);
 	this._dropdownState = 'inactive';
 
 	if (this._dropdownAnimation) {
@@ -88,7 +91,7 @@ SideMenu.prototype._cancelDropdownOnMobile = function() {
 	}
 };
 
-SideMenu.prototype._onClick = function(e) {
+SideMenu.prototype._onMenuBtnClick = function(e) {
 	this._toggleMenu();
 };
 
@@ -96,6 +99,12 @@ SideMenu.prototype._toggleMenu = function() {
 	if (this._dropdownState === 'closed') {
 		this._openMenu();
 	} else if (this._dropdownState === 'open') {
+		this._closeMenu();
+	}
+};
+
+SideMenu.prototype._onPageSlideChangedDropdownActive = function() {
+	if (this._dropdownState === 'open') {
 		this._closeMenu();
 	}
 };
@@ -163,7 +172,7 @@ SideMenu.prototype._controllLineHeight = function() {
 		line = this._listItemsArr[i].querySelector('.line');
 		prevElem = this._listItemsArr[i - 1] ? this._listItemsArr[i - 1] : this._menuButton;
 		height = this._calculateLineHeight(this._listItemsArr[i], prevElem);
-		line.style.height = height  + 'px';
+		line.style.height = (height > 0 ? height : 0) + 'px';
 	}
 };
 
