@@ -69,7 +69,11 @@
 							<div class="text">
 								перегонка, испарение жидкости с последующим охлаждением и конденсацией паров. Различают дистилляцию с конденсацией пара в жидкость и дистиляцию с конденсацией пара в твердую фазу (в конденсате возникает распредение концентрации компонентов)
 							</div>
-							<button class="order">заказать</button>
+							<button class="order corner_btn">
+								<span class="top_left_corner"></span>
+								<span class="bottom_right_corner"></span>
+								заказать
+							</button>
 						</div>
 					</div>
 				</div>
@@ -93,8 +97,46 @@
 			</section>
 			<section class="page_slide slide3" id="slide3">
 				<div class="container page_slide_inner_container flex flex-center-v">
-					<div class="page_slide_content">
-						SLIDE 3
+					<div class="page_slide_content clr">
+						<div class="col_left">
+							<div class="text_block flex flex-center-v flex-center-h">
+								<h4 class="block_main_title">Холодильник</h4>
+								<div class="text">
+									<p>- дисстиляционный процесс в контейнере удлиненной формы с частичныс расплавлением рафинируемого вещества в перемещаемой жидкой зоне и конденсацией пара в тверндую фазу по мере выхода конденсата в холодную область. Процесс разработан теоретически.</p>
+									<p>При движении зонного нагревателя вдоль контейнера сверзу вниз в контенере формируется твердый коненсат с нераномерны распределением примесейь и наиболее чистая часть конденсата может выделена в качестве продукта.</p>
+								</div>
+								<button class="back corner_btn">
+									<span class="top_left_corner"></span>
+									<span class="bottom_right_corner"></span>
+									Назад
+								</button>
+							</div>
+						</div>
+						<div class="col_right">
+							<div class="image_block svg_lines">
+								<img src="img/ecd98adf048befa8139abb73dd780e0b.png" alt="" class="responsive_img">
+								<svg class="svg_layer"></svg>
+								<div class="labels_container">
+									<div class="label label1">
+										<div class="label_inner animatable">Холодильник</div>
+									</div>
+									<div class="label label2">
+										<div class="label_inner animatable">Патрубок</div>
+									</div>
+									<div class="label label3">
+										<div class="label_inner animatable">Фитинг</div>
+									</div>
+									<div class="label label4">
+										<div class="label_inner animatable">Куб</div>
+									</div>
+								</div>
+								<button class="details corner_btn">
+									<span class="top_left_corner"></span>
+									<span class="bottom_right_corner"></span>
+									детали
+								</button>
+							</div>
+						</div>
 					</div>
 				</div>
 			</section>
@@ -149,7 +191,53 @@
 			<section class="page_slide slide5" id="slide5">
 				<div class="container page_slide_inner_container flex flex-center-v">
 					<div class="page_slide_content">
-						SLIDE 5
+						<form action="php/send.php" class="contact_form clr content_inner flex" id="contact_form">
+							<div class="row">
+								<input type="hidden" value="skyfler@gmail.com" name="admin-email" data-component="form-input">
+								<input type="hidden" value="Ukrainian IT_School" name="admin-name" data-component="form-input">
+								<div class="waiting_block"></div>
+								<div class="block_main_title">Заказ онлайн</div>
+								<div class="subtitle">Оставьте заявку и Мы с Вами свяжемся.</div>
+								<div class="input_group input_name">
+									<input type="text" placeholder="Имя" class="required" name="Name" data-component="form-input">
+								</div>
+								<div class="input_group input_surname">
+									<input type="text" placeholder="Фамилия" class="required" name="Surname" data-component="form-input">
+								</div>
+								<div class="input_group input_tel">
+									<input type="text" placeholder="Телефон" class="required" name="Tel" data-component="form-input">
+								</div>
+								<div class="input_group input_mail">
+									<input type="email" placeholder="Электронный адрес" class="required" name="Email" data-component="form-input">
+								</div>
+								<div class="input_group input_message">
+									<textarea placeholder="Сообщение" class="" name="Message" data-component="form-input"></textarea>
+								</div>
+								<div class="input_group input_submit">
+									<button type="submit" class="submit corner_btn">
+										<span class="top_left_corner"></span>
+										<span class="bottom_right_corner"></span>
+										Отправить
+									</button>
+								</div>
+							</div>
+						</form>
+						<div class="contacts flex">
+							<div class="contact_blocks flex">
+								<div class="contact_block">г. Харьков, ул. Сумская, 2</div>
+								<div class="contact_block">
+									<a href="tel:+380123456789">+380 (12) 345 67 89</a>
+								</div>
+								<div class="contact_block">
+									<a href="mailto:mail@domen.com">mail@domen.com</a>
+								</div>
+							</div>
+							<ul class="socials">
+								<li><a class="facebook" href="#" target="_blank">facebook</a></li>
+								<li><a class="twitter" href="#" target="_blank">twitter</a></li>
+								<li><a class="instagram" href="#" target="_blank">instagram</a></li>
+							</ul>
+						</div>
 					</div>
 				</div>
 			</section>

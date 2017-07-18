@@ -11,6 +11,7 @@
 	var FirstSlideIntro = require('./firstSlideIntro');
 	var SideMenu = require('./sideMenu');
 	var Slider = require('./slider');
+	var PageSlide3Controller = require('./pageSlide3Controller');
 
 	_polyfills.init();
 	_extendStandartPrototypes.init();
@@ -83,11 +84,128 @@
 
 	var sliderElem = document.querySelector('#slider');
 	if (sliderElem) {
-		window.slider = new Slider({
+		var slider = new Slider({
 			elem: sliderElem,
 			delay: 0,
 			controllsElem: document.querySelector('.slider_dot_controlls')
 		});
 	}
 
+	var slide3SvgElem = document.querySelector('.svg_lines');
+	if (slide3SvgElem) {
+		window.pageSlide3Controller = new PageSlide3Controller({
+			elem: slide3SvgElem,
+			colLeft: document.querySelector('#slide3 .col_left'),
+			labelElemsDataArr: [
+				{
+					elem: slide3SvgElem.querySelector('.label1'),
+					corner: {
+						xs: 'bottom-right',
+						sm: 'bottom-right',
+						md: 'bottom-left',
+						lg: 'bottom-left'
+					},
+					imagePercentCoords: {
+						xs: {
+							x: 73.1,
+							y: 9.3
+						},
+						sm: {
+							x: 73.1,
+							y: 9.3
+						},
+						md: {
+							x: 82.8,
+							y: 32
+						},
+						lg: {
+							x: 82.8,
+							y: 32
+						}
+					},
+				},
+				{
+					elem: slide3SvgElem.querySelector('.label2'),
+					corner: {
+						xs: 'bottom-right',
+						sm: 'bottom-right',
+						md: 'bottom-right',
+						lg: 'bottom-right'
+					},
+					imagePercentCoords: {
+						xs: {
+							x: 24.7,
+							y: 33.8
+						},
+						sm: {
+							x: 24.7,
+							y: 33.8
+						},
+						md: {
+							x: 24.7,
+							y: 33.8
+						},
+						lg: {
+							x: 24.7,
+							y: 33.8
+						}
+					},
+				},
+				{
+					elem: slide3SvgElem.querySelector('.label3'),
+					corner: {
+						xs: 'top-left',
+						sm: 'top-left',
+						md: 'top-left',
+						lg: 'top-left'
+					},
+					imagePercentCoords: {
+						xs: {
+							x: 62.9,
+							y: 47.5
+						},
+						sm: {
+							x: 62.9,
+							y: 47.5
+						},
+						md: {
+							x: 62.9,
+							y: 47.5
+						},
+						lg: {
+							x: 62.9,
+							y: 47.5
+						}
+					},
+				},
+				{
+					elem: slide3SvgElem.querySelector('.label4'),
+					corner: {
+						xs: 'top-right',
+						sm: 'top-right',
+						md: 'top-right',
+						lg: 'top-right'
+					},
+					imagePercentCoords: {
+						xs: {
+							x: 22.8,
+							y: 69.9
+						},
+						sm: {
+							x: 22.8,
+							y: 69.9
+						},
+						md: {
+							x: 22.8,
+							y: 69.9
+						},
+						lg: {
+							x: 22.8,
+							y: 69.9
+						}
+					},
+				}
+			]
+		});
+	}
 })();

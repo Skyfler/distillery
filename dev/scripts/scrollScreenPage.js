@@ -423,6 +423,15 @@ ScrollScreenPage.prototype._scrollPage = function() {
 			this._pageSlidesArr[this._lastActiveSlideIndex].style.marginTop = '';
 			this._pageSlidesArr[this._lastActiveSlideIndex].style.opacity = 0;
 			this._pageSlidesArr[this._lastActiveSlideIndex].style.overflow = '';
+
+			this._sendCustomEvent(this._elem, 'pageSlideChangedAnimationEnd', {
+				bubbles: true,
+				detail: {
+					activeSlideIndex: this._activeSlideIndex,
+					activeSlideID: this._pageSlidesArr[this._activeSlideIndex].id,
+					activeSlideElem: this._findParentSlideElem()
+				}
+			});
 		}.bind(this)
 	);
 

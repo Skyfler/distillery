@@ -46,7 +46,7 @@ FirstSlideIntro.prototype._init = function() {
 	this._animateOpacity(
 		this._logoElems.concat(this._scrollIcon),
 		function(){
-			console.log(this.NAME + ': callback');
+//			console.log(this.NAME + ': callback');
 			this._addListener(window, 'wheel', this._onMouseWheel);
 			this._addListener(document, 'touchstart', this._onTouchStart);
 		}.bind(this)
