@@ -208,3 +208,12 @@ body.intro_complete .intro .scroll_icon {
 	margin: 0 10px;
 	width: 10px;
 }
+
+@media screen and (min-width: 992px) {
+
+	.intro .slider_dot_controlls#page_slide5_slider_controlls {
+		display: none;
+	}
+
+}
+

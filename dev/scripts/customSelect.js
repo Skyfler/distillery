@@ -17,19 +17,24 @@ function CustomSelect(options) {
 	this._required = this._elem.classList.contains('required');
 	this._isOpen = false;
 
-	this._elem.dataset.value = '';
-
 	this._onClick = this._onClick.bind(this);
 	this._onDocumentClick = this._onDocumentClick.bind(this);
 	this._onResize = this._onResize.bind(this);
 
-	this._revealPublicMethods();
-
-	this._addListener(this._elem, 'click', this._onClick);
+	this._init();
 }
 
 CustomSelect.prototype = Object.create(Helper.prototype);
 CustomSelect.prototype.constructor = CustomSelect;
+
+CustomSelect.prototype._init = function() {
+	this._elem.dataset.value = '';
+
+	this._revealPublicMethods();
+	this._setDefaultBySelectedAttr();
+
+	this._addListener(this._elem, 'click', this._onClick);
+};
 
 CustomSelect.prototype._onResize = function() {
 	this._listElem.style.maxHeight = window.innerHeight - this._listElem.getBoundingClientRect().top + 'px';
@@ -111,15 +116,21 @@ CustomSelect.prototype._getOptionElems = function() {
 CustomSelect.prototype.setOption = function(option) {
 	if (!option) return;
 
+	var optionSetSuccess = false;
+
 	if (option.index !== undefined && typeof option.index === 'number') {
-		this._setOptionByIndex(option.index);
+		optionSetSuccess = this._setOptionByIndex(option.index);
 
 	} else if (option.value) {
-		this._setOptionByValue(option.value);
+		optionSetSuccess = this._setOptionByValue(option.value);
 	}
 
-	this._sendCustomEvent(this._titleElem, 'focus', {bubbles: true});
-	this._sendCustomEvent(this._titleElem, 'blur', {bubbles: true});
+	if (optionSetSuccess) {
+		this._sendCustomEvent(this._titleElem, 'focus', {bubbles: true});
+		this._sendCustomEvent(this._titleElem, 'blur', {bubbles: true});
+	}
+
+	return optionSetSuccess;
 };
 
 CustomSelect.prototype._setOptionByIndex = function(optionIndex) {
@@ -132,8 +143,11 @@ CustomSelect.prototype._setOptionByIndex = function(optionIndex) {
 
 		this._setValue(option.textContent, option.dataset.value);
 		this._elem.classList.add('option_selected');
+
+		return true;
 	} else {
 		// this.resetToDefault();
+		return false;
 	}
 };
 
@@ -147,11 +161,12 @@ CustomSelect.prototype._setOptionByValue = function(optionValue) {
 			this._setValue(option.textContent, option.dataset.value);
 			this._elem.classList.add('option_selected');
 
-			return;
+			return true;
 		}
 	}
 
 	// this.resetToDefault();
+	return false;
 };
 
 CustomSelect.prototype._revealPublicMethods = function() {
@@ -183,6 +198,21 @@ CustomSelect.prototype.revealByDependency = function() {
 	this._elem.classList.add('reveal_by_dependency');
 	if (this._required) {
 		this._elem.classList.add('required');
+	}
+};
+
+CustomSelect.prototype._setDefaultBySelectedAttr = function() {
+	var optionElemArr = this._getOptionElems();
+
+	for (var i = 0; i < optionElemArr.length; i++) {
+		if (optionElemArr[i].getAttribute('data-selected') !== null) {
+			var option = optionElemArr[i];
+
+			this._setValue(option.textContent, option.dataset.value);
+			this._elem.classList.add('option_selected');
+
+			return;
+		}
 	}
 };
 

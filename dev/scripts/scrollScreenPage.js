@@ -493,10 +493,12 @@ ScrollScreenPage.prototype._calculateNewTop = function() {
 };
 
 ScrollScreenPage.prototype._scrollPageDraw = function(timePassed) {
-	var newTop;
+	var timeMultiplier = Animation.quadEaseInOut(this._animationDuration, timePassed),
+		newTop;
 
 	for (var i = 0; i < this._slideCount; i++) {
-		newTop = ((this._endSlideTopPositionArr[i] - this._currentSlideTopPositionArr[i]) / this._animationDuration) * timePassed + this._currentSlideTopPositionArr[i];
+//		newTop = ((this._endSlideTopPositionArr[i] - this._currentSlideTopPositionArr[i]) / this._animationDuration) * timePassed + this._currentSlideTopPositionArr[i];
+		newTop = this._currentSlideTopPositionArr[i] + (this._endSlideTopPositionArr[i] - this._currentSlideTopPositionArr[i]) * timeMultiplier;
 		this._pageSlidesArr[i].style.top = newTop + 'px';
 	}
 };

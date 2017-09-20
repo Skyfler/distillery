@@ -10,8 +10,9 @@
 	var ContactFormController = require('./contactFormController');
 	var FirstSlideIntro = require('./firstSlideIntro');
 	var SideMenu = require('./sideMenu');
-	var Slider = require('./slider');
 	var PageSlide3Controller = require('./pageSlide3Controller');
+	var PageSlide4Controller = require('./pageSlide4Controller');
+	var PageSlide5Controller = require('./pageSlide5Controller');
 
 	_polyfills.init();
 	_extendStandartPrototypes.init();
@@ -82,18 +83,9 @@
 		});
 	}
 
-	var sliderElem = document.querySelector('#slider');
-	if (sliderElem) {
-		var slider = new Slider({
-			elem: sliderElem,
-			delay: 0,
-			controllsElem: document.querySelector('.slider_dot_controlls')
-		});
-	}
-
-	var slide3SvgElem = document.querySelector('.svg_lines');
+	var slide3SvgElem = document.querySelector('#slide3 .svg_lines');
 	if (slide3SvgElem) {
-		window.pageSlide3Controller = new PageSlide3Controller({
+		var pageSlide3Controller = new PageSlide3Controller({
 			elem: slide3SvgElem,
 			colLeft: document.querySelector('#slide3 .col_left'),
 			labelElemsDataArr: [
@@ -208,4 +200,22 @@
 			]
 		});
 	}
+
+	var slide4Elem = document.querySelector('#slide4');
+	if (slide4Elem) {
+		var pageSlide4Controller = new PageSlide4Controller({
+			elem: slide4Elem,
+			pageSlidesSliderActive: 'slide4'
+		});
+	}
+
+	var slide5Elem = document.querySelector('#slide5');
+	if (slide5Elem) {
+		var pageSlide5Controller = new PageSlide5Controller({
+			elem: slide5Elem,
+			configurationBlockSelector: '.configuration_block',
+			previewBlockSelector: '.preview_container'
+		});
+	}
+
 })();

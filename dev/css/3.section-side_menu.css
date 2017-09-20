@@ -124,6 +124,21 @@
 	.side_menu .li_slide1 .side_menu_list_item_inner:before {
 		background-image: url(../img/slide_1_thumb.jpg);
 	}
+	.side_menu .li_slide2 .side_menu_list_item_inner:before {
+		background-image: url(../img/slide_1_thumb.jpg);
+	}
+	.side_menu .li_slide3 .side_menu_list_item_inner:before {
+		background-image: url(../img/slide_1_thumb.jpg);
+	}
+	.side_menu .li_slide4 .side_menu_list_item_inner:before {
+		background-image: url(../img/slide_1_thumb.jpg);
+	}
+	.side_menu .li_slide5 .side_menu_list_item_inner:before {
+		background-image: url(../img/slide_1_thumb.jpg);
+	}
+	.side_menu .li_slide6 .side_menu_list_item_inner:before {
+		background-image: url(../img/slide_1_thumb.jpg);
+	}
 
 	.side_menu .side_menu_list_item_inner:after {
 		content: "";

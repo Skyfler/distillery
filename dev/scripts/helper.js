@@ -140,11 +140,11 @@ Helper.prototype._loadImages = function(imgSrcArr) {
 Helper.prototype._checkScreenWidth = function(min, max) {
 	var windowWidth = window.innerWidth;
 
-	if (min !== undefined || max !== undefined) {
-		if (min === undefined) {
+	if ((min !== undefined && min !== false) || (max !== undefined && max !== false)) {
+		if (min === undefined || min === false) {
 			min = 0;
 		}
-		if (max === undefined) {
+		if (max === undefined || max === false) {
 			max = windowWidth;
 		}
 

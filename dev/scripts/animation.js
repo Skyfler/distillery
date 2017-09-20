@@ -116,7 +116,7 @@ Animation._progress = function(fullDuration, timePassed) {
 	if (fullDuration === 0) {
 		progress = 1;
 	} else {
-		progress = (timePassed / (fullDuration / 100)) / 100;
+		progress = timePassed / fullDuration;
 	}
 
 	return progress;
@@ -138,12 +138,12 @@ Animation.circEaseIn = function(fullDuration, timePassed) {
 
 Animation.quadEaseOut = function(fullDuration, timePassed) {
 	var progress = 1 - this._progress(fullDuration, timePassed);
-	return 1 - (Math.pow(progress, 2));
+	return 1 - Math.pow(progress, 2);
 };
 
 Animation.circEaseOut = function(fullDuration, timePassed) {
 	var progress = 1 - this._progress(fullDuration, timePassed);
-	return 1 - (1 - Math.sin(Math.acos(progress)));
+	return Math.sin(Math.acos(progress));
 };
 
 Animation.quadEaseInOut = function(fullDuration, timePassed) {
@@ -151,7 +151,7 @@ Animation.quadEaseInOut = function(fullDuration, timePassed) {
 		timeFraction;
 
 	if (halfDuration > timePassed) {
-		timeFraction = (this.quadEaseIn(halfDuration, timePassed) / 2);
+		timeFraction = this.quadEaseIn(halfDuration, timePassed) / 2;
 
 	} else {
 		var secondHalfTimePassed = timePassed - halfDuration;
@@ -167,7 +167,7 @@ Animation.circEaseInOut = function(fullDuration, timePassed) {
 		timeFraction;
 
 	if (halfDuration > timePassed) {
-		timeFraction = (this.circEaseIn(halfDuration, timePassed) / 2);
+		timeFraction = this.circEaseIn(halfDuration, timePassed) / 2;
 
 	} else {
 		var secondHalfTimePassed = timePassed - halfDuration;

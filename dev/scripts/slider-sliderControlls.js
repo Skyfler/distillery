@@ -7,26 +7,27 @@ try {
 	console.warn(err);
 }
 
-function SliderContrlolls(options) {
-	options.name = options.name || 'SliderContrlolls';
+function SliderControlls(options) {
+	options.name = options.name || 'SliderControlls';
 	Helper.call(this, options);
 
 	this._elem = options.elem;
 	this._slidesCount = options.slidesCount;
 	this._animationDuration = options.animationDuration || 500;
 	this._slider = options.slider;
+	this._sliderElem = options.sliderElem;
+	this._sliderSelector = options.sliderSelector;
 
 	this._onClick = this._onClick.bind(this);
-	this._onPageSlideChanged = this._onPageSlideChanged.bind(this);
 	this._onSliderSlideChanged = this._onSliderSlideChanged.bind(this);
 
 	this._init();
 }
 
-SliderContrlolls.prototype = Object.create(Helper.prototype);
-SliderContrlolls.prototype.constructor = SliderContrlolls;
+SliderControlls.prototype = Object.create(Helper.prototype);
+SliderControlls.prototype.constructor = SliderControlls;
 
-SliderContrlolls.prototype._init = function() {
+SliderControlls.prototype._init = function() {
 	this._listElem = this._elem.querySelector('.slider_dot_controlls_list');
 //	this._listElem = this._elem;
 	if (!this._listElem) return;
@@ -35,12 +36,13 @@ SliderContrlolls.prototype._init = function() {
 	this._controllsElemsArr = this._listElem.querySelectorAll('.slider_dot_controll');
 	this._controllsVisible = false;
 
+	this._setActive(this._slider.getActiveSlideIndex());
+
 	this._addListener(this._elem, 'click', this._onClick);
-	this._addListener(document, 'pageSlideChanged', this._onPageSlideChanged);
 	this._addListener(document, 'sliderSlideChanged', this._onSliderSlideChanged);
 };
 
-SliderContrlolls.prototype._createList = function() {
+SliderControlls.prototype._createList = function() {
 	var listHtml = '',
 		listItemHtml = '<li class="slider_dot_controll" data-component="slider_control" data-slide-index="{index}"></li>',
 		listItemDcorationHtml = '<li class="dot_controll_decoration"></li>';
@@ -55,13 +57,13 @@ SliderContrlolls.prototype._createList = function() {
 	return listHtml;
 };
 
-SliderContrlolls.prototype._onClick = function(e) {
+SliderControlls.prototype._onClick = function(e) {
 	var target = e.target;
 
 	this._controlSlider(target);
 };
 
-SliderContrlolls.prototype._onSliderSlideChanged = function(e) {
+SliderControlls.prototype._onSliderSlideChanged = function(e) {
 	var slideIndex = e.detail.slideIndex;
 	var slider = e.detail.slider;
 	if (slideIndex === undefined || this._slider !== slider) return;
@@ -69,7 +71,7 @@ SliderContrlolls.prototype._onSliderSlideChanged = function(e) {
 	this._setActive(slideIndex);
 };
 
-SliderContrlolls.prototype._setActive = function(index) {
+SliderControlls.prototype._setActive = function(index) {
 	for (var i = 0; i < this._controllsElemsArr.length; i++) {
 		this._controllsElemsArr[i].classList.remove('active');
 	}
@@ -80,28 +82,18 @@ SliderContrlolls.prototype._setActive = function(index) {
 	}
 };
 
-SliderContrlolls.prototype._controlSlider = function(target) {
+SliderControlls.prototype._controlSlider = function(target) {
 	var control = target.closest('[data-component="slider_control"]');
 	if (!control) return;
 	var slideIndex = control.dataset.slideIndex;
 	if (!slideIndex) return;
 
-	this._sendCustomEvent(document, 'sliderControl', { bubbles: true, detail: {slideIndex: parseInt(slideIndex), controlls: this} });
+	var targetSlider = this._slider || this._sliderElem || this._sliderSelector || false;
+	this._sendCustomEvent(document, 'sliderControl', { bubbles: true, detail: {slideIndex: parseInt(slideIndex), targetSlider: targetSlider} });
 };
 
-SliderContrlolls.prototype._onPageSlideChanged = function(e) {
-	var slideID = e.detail.activeSlideID;
-
-	if (slideID === 'slide4' && !this._controllsVisible) {
-		this._showControlls();
-	} else if (slideID !== 'slide4' && this._controllsVisible) {
-		this._hideControlls();
-	}
-};
-
-
-SliderContrlolls.prototype._showControlls = function() {
-	this._controllsVisible = true;
+SliderControlls.prototype.show = function() {
+	this.visible = true;
 
 	if (this._animation) {
 		this._animation.stop(true);
@@ -123,8 +115,8 @@ SliderContrlolls.prototype._showControlls = function() {
 	);
 };
 
-SliderContrlolls.prototype._hideControlls = function() {
-	this._controllsVisible = false;
+SliderControlls.prototype.hide = function() {
+	this.visible = false;
 
 	if (this._animation) {
 		this._animation.stop(true);
@@ -146,7 +138,7 @@ SliderContrlolls.prototype._hideControlls = function() {
 };
 
 try {
-	module.exports = SliderContrlolls;
+	module.exports = SliderControlls;
 } catch (err) {
 	console.warn(err);
 }

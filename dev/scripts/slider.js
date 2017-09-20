@@ -2,7 +2,6 @@
 
 try {
 	var Helper = require('./helper');
-	var SliderContrlolls = require('./slider-sliderContrlolls');
 } catch (err) {
 	console.warn(err);
 }
@@ -15,7 +14,18 @@ function Slider(options) {
 	this._overflowContainer = this._elem.querySelector('.overflow_hidden_container');
 	this._overflowBlock = this._overflowContainer.querySelector('.overflow_block');
 	this._moveDelay = options.delay || 0;
-	this._controllsElem = options.controllsElem;
+//	this._breakPoint = options.breakPoint || 0;
+	this._breakPoint = {};
+	if (typeof options.breakPoint === 'number') {
+		this._breakPoint.min = options.breakPoint;
+		this._breakPoint.max = false;
+	} else {
+		this._breakPoint.min = options.breakPoint.min || 0;
+		this._breakPoint.max = typeof options.breakPoint.max === 'number' ? options.breakPoint.max : false;
+	}
+	this._pauseOnHover = !!options.pauseOnHover || false;
+	this._listenToOuterControllEvents = options.listenToOuterControllEvents !== undefined ? !!options.listenToOuterControllEvents : true;
+	this._allowTouchDrag = options.allowTouchDrag !== undefined ? !!options.touchDrag : true;
 
 	this._onClick = this._onClick.bind(this);
 	this._onCornerTransitionEnd = this._onCornerTransitionEnd.bind(this);
@@ -27,25 +37,30 @@ function Slider(options) {
 	this._onDragStart = this._onDragStart.bind(this);
 	this._onMouseMoveDrag = this._onMouseMoveDrag.bind(this);
 	this._onSliderControl = this._onSliderControl.bind(this);
+	this._onResize = this._onResize.bind(this);
 
-	this._initSlider();
-
-	this._addListener(this._elem, 'click', this._onClick);
-	if (options.pauseOnHover) {
-		this._addListener(this._elem, 'mouseover', this._onMouseOver);
-		this._addListener(this._elem, 'mouseout', this._onMouseOut);
-	}
+	this._init();
 }
 
 Slider.prototype = Object.create(Helper.prototype);
 Slider.prototype.constructor = Slider;
 
-Slider.prototype._remove = function() {
-	if (this._sliderContrlolls && this._sliderContrlolls.remove) {
-		this._sliderContrlolls.remove();
+Slider.prototype._init = function() {
+	var slidesArr = this._overflowBlock.querySelectorAll('[data-component="slide"]');
+	this._slidesCount = slidesArr.length;
+
+	this._currSlide = 1;
+
+	if (this._checkScreenWidth(this._breakPoint.min, this._breakPoint.max)) {
+		this._active = true;
+
+		this._initSlider();
+
+	} else {
+		this._active = false;
 	}
 
-	Helper.prototype.remove.apply(this, arguments);
+	this._addListener(window, 'resize', this._onResize);
 };
 
 Slider.prototype._initSlider = function() {
@@ -53,7 +68,6 @@ Slider.prototype._initSlider = function() {
 	if (0 === slidesArr.length) return;
 
 	this._slidesCount = slidesArr.length;
-	this._currSlide = 1;
 
 	var firstSlide = slidesArr[0];
 	var lastSlide = slidesArr[slidesArr.length - 1];
@@ -64,21 +78,80 @@ Slider.prototype._initSlider = function() {
 	this._slidesArr = Array.prototype.slice.call(this._overflowBlock.querySelectorAll('[data-component="slide"]'));
 	for (var i = 0; i < this._slidesArr.length; i++) {
 		this._slidesArr[i].style.width = 100 / (this._slidesCount + 2) + '%';
-//		this._slidesArr[i].classList.remove('selected');
+		this._slidesArr[i].classList.remove('selected');
 	}
-//	this._slidesArr[1].classList.add('selected');
-	this._setSelectedClass(1);
+
+	this._currSlide = 1;
+	this._setSelectedClass(this._currSlide);
 	this._overflowBlock.style.width = 100 * (this._slidesCount + 2) + '%';
 	this._overflowBlock.style.left = '-100%';
 
-	this._moveOnSwipe();
-	this._initControlls();
-	console.log();
-	this._controllSlideInnerWidth();
+	this._sendCustomEvent(this._elem, 'sliderSlideChanged', { bubbles: true, detail: {slideIndex: this._currSlide, slider: this, sliderElem: this._elem} });
 
-	this._sendCustomEvent(document, 'sliderSlideChanged', { bubbles: true, detail: {slideIndex: this._currSlide, slider: this} });
+	this._addListener(this._elem, 'click', this._onClick);
+	if (this._pauseOnHover) {
+		this._addListener(this._elem, 'mouseover', this._onMouseOver);
+		this._addListener(this._elem, 'mouseout', this._onMouseOut);
+	}
+
+	if (this._listenToOuterControllEvents) {
+		this._addListener(document, 'sliderControl', this._onSliderControl);
+	}
 
 	if (0 !== this._moveDelay) this._moveOverTime();
+
+	this._moveOnSwipe();
+};
+
+Slider.prototype._onSliderControl = function(e) {
+	var targetSlider = e.detail.targetSlider;
+	var slideIndex = e.detail.slideIndex;
+	var controlls = e.detail.controlls;
+	if (
+		(typeof targetSlider === 'string' && this._elem.matches(targetSlider)) ||
+		(targetSlider instanceof Slider && targetSlider === this) ||
+		(targetSlider instanceof Element && targetSlider === this._elem)
+	) {
+		if (this._isMoving || slideIndex === undefined || this._sliderContrlolls !== controlls) return;
+
+		if (this._currSlide < slideIndex) {
+			this._moveSlideForward(slideIndex - this._currSlide);
+		} else if (this._currSlide > slideIndex) {
+			this._moveSlideBack(this._currSlide - slideIndex);
+		}
+	}
+};
+
+Slider.prototype._cancelInitSlider = function() {
+	if (this._moveTimer) {
+		clearTimeout(this._moveTimer);
+	}
+
+	for (var i = this._listenerArr.length - 1; i >= 0 ; i--) {
+		if (
+			this._listenerArr[i].elem !== window
+			|| this._listenerArr[i].event !== 'resize'
+			|| this._listenerArr[i].handler !== this._onResize
+		) {
+			this._removeListener(this._listenerArr[i].elem, this._listenerArr[i].event, this._listenerArr[i].handler, this._listenerArr[i].phase);
+		}
+	}
+
+	if (this._slidesArr.length > 0) {
+		this._slidesArr[0].parentElement.removeChild(this._slidesArr[0]);
+		this._slidesArr[this._slidesArr.length - 1].parentElement.removeChild(this._slidesArr[this._slidesArr.length - 1]);
+	}
+
+	this._overflowBlock.style.width = '';
+	this._overflowBlock.style.left = '';
+
+	this._slidesArr = Array.prototype.slice.call(this._overflowBlock.querySelectorAll('[data-component="slide"]'));
+	for (var i = 0; i < this._slidesArr.length; i++) {
+		this._slidesArr[i].style.width = '';
+		this._slidesArr[i].classList.remove('selected');
+	}
+
+	this._isMoving = false;
 };
 
 Slider.prototype._setSelectedClass = function(slideIndex) {
@@ -96,33 +169,6 @@ Slider.prototype._setSelectedClass = function(slideIndex) {
 	} else if (slideIndex === this._slidesArr.length - 2) {
 		this._slidesArr[0].classList.add('selected');
 	}
-};
-
-Slider.prototype._controllSlideInnerWidth = function(slideIndex) {
-	requestAnimationFrame(function(){
-		var slideWidth = this._slidesArr[0].getBoundingClientRect().width;
-		if (slideWidth !== this._slidesArr[0].querySelector('.slider_slide_inner').getBoundingClientRect().width) {
-			for (var i = 0; i < this._slidesArr.length; i++) {
-				this._slidesArr[i].querySelector('.slider_slide_inner').style.width = slideWidth + 'px';
-			}
-		}
-
-		this._controllSlideInnerWidth();
-	}.bind(this));
-};
-
-Slider.prototype._initControlls = function() {
-	this._sliderContrlolls = {};
-
-	if (this._controllsElem) {
-		this._sliderContrlolls = new SliderContrlolls({
-			elem: this._controllsElem,
-			slidesCount: this._slidesCount,
-			slider: this
-		});
-	}
-
-	this._addListener(document, 'sliderControl', this._onSliderControl)
 };
 
 Slider.prototype._onClick = function(e) {
@@ -162,123 +208,67 @@ Slider.prototype._onMouseOut = function() {
 	if (0 !== this._moveDelay) this._moveOverTime();
 };
 
-Slider.prototype._onSliderControl = function(e) {
-	var slideIndex = e.detail.slideIndex;
-	var controlls = e.detail.controlls;
-	if (this._isMoving || slideIndex === undefined || this._sliderContrlolls !== controlls) return;
-
-	if (this._currSlide < slideIndex) {
-		this._moveSlideForward(slideIndex - this._currSlide);
-	} else if (this._currSlide > slideIndex) {
-		this._moveSlideBack(this._currSlide - slideIndex);
-	}
-};
-
 Slider.prototype._moveSlideForward = function(increment) {
-//	console.log(this.NAME + ': moveSlideForward function');
 	increment = (increment === undefined) ? 1 : increment;
 	this._overflowBlock.style.transitionDuration = '';
 	this._isMoving = true;
-//	console.log({
-//		event: 'moveSlideForward',
-//		isMoving: this._isMoving,
-//		transitionDuration: ''
-//	});
-
-//	var slidesArr = this._overflowBlock.querySelectorAll('[data-component="slide"]');
-//	this._slidesArr[this._currSlide].classList.remove('selected');
 
 	this._currSlide += increment;
+
 	this._setSelectedClass(this._currSlide);
-//	this._slidesArr[this._currSlide].classList.add('selected');
 
 	this._overflowBlock.style.left = -100 * this._currSlide + '%';
-//	console.log({
-//		event: 'moveSlideForward',
-//		newLeft: -100 * this._currSlide,
-//		units: '%'
-//	});
 
 	if (this._currSlide > this._slidesCount) {
 		this._currSlide = 1;
-//		this._slidesArr[this._currSlide].classList.add('selected');
 		this._setSelectedClass(this._currSlide);
 		this._addListener(this._elem, 'transitionend', this._onCornerTransitionEnd);
 	} else {
 		this._addListener(this._elem, 'transitionend', this._onMiddleTransitionEnd);
 	}
 
-	this._sendCustomEvent(document, 'sliderSlideChanged', { bubbles: true, detail: {slideIndex: this._currSlide, slider: this} });
+	this._sendCustomEvent(this._elem, 'sliderSlideChanged', { bubbles: true, detail: {slideIndex: this._currSlide, slider: this, sliderElem: this._elem} });
 };
 
 Slider.prototype._moveSlideBack = function(decrement) {
-//	console.log(this.NAME + ': moveSlideBack function');
 	decrement = (decrement === undefined) ? 1 : decrement;
 	this._overflowBlock.style.transitionDuration = '';
 	this._isMoving = true;
-//	console.log({
-//		event: 'moveSlideBack',
-//		isMoving: this._isMoving,
-//		transitionDuration: ''
-//	});
-
-//	var slidesArr = this._overflowBlock.querySelectorAll('[data-component="slide"]');
-//	this._slidesArr[this._currSlide].classList.remove('selected');
 
 	this._currSlide -= decrement;
+
 	this._setSelectedClass(this._currSlide);
-//	this._slidesArr[this._currSlide].classList.add('selected');
 
 	this._overflowBlock.style.left = -100 * this._currSlide + '%';
-//	console.log({
-//		event: 'moveSlideBack',
-//		newLeft: -100 * this._currSlide,
-//		units: '%'
-//	});
 
 	if (0 === this._currSlide) {
 		this._currSlide = this._slidesCount;
-//		this._slidesArr[this._currSlide].classList.add('selected');
 		this._setSelectedClass(this._currSlide);
 		this._addListener(this._elem, 'transitionend', this._onCornerTransitionEnd);
 	} else {
 		this._addListener(this._elem, 'transitionend', this._onMiddleTransitionEnd);
 	}
 
-	this._sendCustomEvent(document, 'sliderSlideChanged', { bubbles: true, detail: {slideIndex: this._currSlide, slider: this} });
+	this._sendCustomEvent(this._elem, 'sliderSlideChanged', { bubbles: true, detail: {slideIndex: this._currSlide, slider: this, sliderElem: this._elem} });
 };
 
 Slider.prototype._onMiddleTransitionEnd = function(e) {
-//	console.log(this.NAME + ': onMiddleTransitionEnd function');
 	if (e.target !== this._overflowBlock) return;
 
 	this._removeListener(this._elem, 'transitionend', this._onMiddleTransitionEnd);
 	this._isMoving = false;
-//	console.log({
-//		event: 'onMiddleTransitionEnd',
-//		isMoving: this._isMoving
-//	});
 };
 
 Slider.prototype._onCornerTransitionEnd = function(e) {
-//	console.log(this.NAME + ': onCornerTransitionEnd function');
 	if (e.target !== this._overflowBlock) return;
 
 	this._removeListener(this._elem, 'transitionend', this._onCornerTransitionEnd);
 
 	this._overflowBlock.style.transitionDuration = '0s';
 	this._overflowBlock.style.left = -100 * (this._currSlide) + '%';
-//	var slidesArr = this._overflowBlock.querySelectorAll('[data-component="slide"]');
-//	this._slidesArr[this._slidesCount + 1].classList.remove('selected');
-//	this._slidesArr[0].classList.remove('selected');
+	this._slidesArr[this._slidesCount+1].classList.remove('selected');
+	this._slidesArr[0].classList.remove('selected');
 	this._isMoving = false;
-//	console.log({
-//		event: 'onCornerTransitionEnd',
-//		isMoving: this._isMoving,
-//		newLeft: -100 * (this._currSlide),
-//		units: '%',
-//		transitionDuration: '0s'
-//	});
 };
 
 Slider.prototype._moveOnSwipe = function() {
@@ -307,25 +297,17 @@ Slider.prototype._onMouseUp = function(e) {
 };
 
 Slider.prototype._startDrag = function(e) {
-//	console.log(this.NAME + ': startDrag function');
-//	var test = document.querySelector('#test');
-//	if (test) {
-//		test.innerHTML += 'startDrag</br>';
-//		test.scrollTop = test.scrollHeight;
-//	}
-
 	this._removeListener(this._elem, 'transitionend', this._onCornerTransitionEnd);
 	this._removeListener(this._elem, 'transitionend', this._onMiddleTransitionEnd);
 	this._removeListener(this._elem, 'mousedown', this._onMouseDown);
 	this._removeListener(this._elem, 'touchstart', this._onMouseDown);
 
+	if (this._moveTimer) {
+		clearTimeout(this._moveTimer);
+	}
+
 	this._isMoving = false;
 	this._overflowBlock.style.transitionDuration = '0s';
-//	console.log({
-//		event: 'startDrag',
-//		isMoving: this._isMoving,
-//		transitionDuration: '0s'
-//	});
 
 	var clientX = (e.clientX === undefined) ? e.changedTouches[0].clientX : e.clientX;
 	var clientY = (e.clientY === undefined) ? e.changedTouches[0].clientY : e.clientY;
@@ -333,18 +315,7 @@ Slider.prototype._startDrag = function(e) {
 	this._startCursorXPosition = clientX + (window.pageXOffset || document.documentElement.scrollLeft);
 	this._startCursorYPosition = clientY + (window.pageYOffset || document.documentElement.scrollTop);
 
-//	this._startListContainerYPosition = this._overflowBlock.style;
-//	var overflowStartLeftCompStyle = getComputedStyle(this._overflowBlock).left;
-//	this._overflowStartLeft = parseInt(overflowStartLeftCompStyle);
-//	var offsetleft = this._overflowBlock.offsetLeft;
 	this._overflowStartLeft = this._overflowBlock.offsetLeft;
-
-//	if (test) {
-//		test.innerHTML += '   startCursorXPosition = ' + this._startCursorXPosition  + '</br>';
-//		test.innerHTML += '   startCursorYPosition = ' + this._startCursorYPosition  + '</br>';
-//		test.innerHTML += '   overflowStartLeft = ' + this._overflowStartLeft + 'px</br>';
-//		test.scrollTop = test.scrollHeight;
-//	}
 
 	this._addListener(document, 'mousemove', this._onMouseMoveDrag);
 	this._addListener(document, 'touchmove', this._onMouseMoveDrag);
@@ -353,13 +324,6 @@ Slider.prototype._startDrag = function(e) {
 };
 
 Slider.prototype._stopDrag = function(e) {
-//	console.log(this.NAME + ': stopDrag function');
-//	var test = document.querySelector('#test');
-//	if (test) {
-//		test.innerHTML += 'stopDrag</br>';
-//		test.scrollTop = test.scrollHeight;
-//	}
-
 	this._removeListener(document, 'mousemove', this._onMouseMoveDrag);
 	this._removeListener(document, 'touchmove', this._onMouseMoveDrag);
 	this._removeListener(document, 'mouseup', this._onMouseUp);
@@ -368,25 +332,11 @@ Slider.prototype._stopDrag = function(e) {
 	var pxLeft = getComputedStyle(this._overflowBlock).left;
 	var pxIntLeft = parseInt(pxLeft);
 	var percentLeft = this._pixelsToPercents(pxIntLeft);
-//	console.log({
-//		event: 'stopDrag',
-//		pxLeft: pxLeft,
-//		pxIntLeft: pxIntLeft,
-//		newLeft: percentLeft,
-//		units: '%'
-//	});
+
 	this._overflowBlock.style.left = percentLeft + '%';
-//	if (test) {
-//		test.innerHTML += '   pxLeft = ' + pxLeft  + '</br>';
-//		test.innerHTML += '   percentLeft = ' + percentLeft  + '%</br>';
-//		test.scrollTop = test.scrollHeight;
-//	}
-//	this._overflowBlock.style.transitionDuration = '';
 
 	var clientX = (e.clientX === undefined) ? e.changedTouches[0].clientX : e.clientX;
 	var clientY = (e.clientY === undefined) ? e.changedTouches[0].clientY : e.clientY;
-
-//	this._controllSelectedListItemOnStopDrag();
 
 	if (this._startCursorXPosition !== clientX || this._startCursorYPosition !== clientY) {
 		e.preventDefault();
@@ -417,37 +367,17 @@ Slider.prototype._stopDrag = function(e) {
 		var overflowLeft = getComputedStyle(this._overflowBlock).left;
 		var overflowLeftInt = parseInt(overflowLeft);
 		var percentLeft = this._pixelsToPercents(overflowLeftInt);
-//		console.log({
-//			event: 'stopDrag',
-//			percentLeft: percentLeft,
-//			diff: diff,
-//			overflowLeft: overflowLeft,
-//			overflowLeftInt: overflowLeftInt
-//		});
 		if ((diff === 0) && (parseInt(percentLeft * 10) % 100 === 0)) {
-//			console.log({
-//				event: 'stopDrag',
-//				diff: diff,
-//				action: 'Don`t change slide',
-//			});
 
 		} else {
-//			console.log({
-//				event: 'stopDrag',
-//				diff: diff,
-//				action: 'changing slide forvard to ' + diff,
-//			});
 			this._moveSlideForward(diff);
 		}
 
 	} else {
-//		console.log({
-//			event: 'stopDrag',
-//			diff: diff,
-//			action: 'changing slide backward to ' + diff,
-//		});
 		this._moveSlideBack(-diff);
 	}
+
+	if (0 !== this._moveDelay) this._moveOverTime();
 };
 
 Slider.prototype._pixelsToPercents = function(left) {
@@ -455,12 +385,6 @@ Slider.prototype._pixelsToPercents = function(left) {
 };
 
 Slider.prototype._onMouseMoveDrag = function(e) {
-//	var test = document.querySelector('#test');
-//	if (test) {
-//		test.innerHTML += 'onMouseMoveDrag</br>';
-//		test.scrollTop = test.scrollHeight;
-//	}
-//	console.log(this.NAME + ': onMouseMoveDrag function.');
 	var clientX = (e.clientX === undefined) ? e.changedTouches[0].clientX : e.clientX;
 
 	var currentcursorXPosition = clientX + (window.pageXOffset || document.documentElement.scrollLeft);
@@ -468,87 +392,34 @@ Slider.prototype._onMouseMoveDrag = function(e) {
 
 	var newLeft = this._overflowStartLeft + xPositionDeleta;
 
-//	if (test) {
-//		test.innerHTML += '   newLeft = ' + newLeft  + 'px</br>';
-//		test.scrollTop = test.scrollHeight;
-//	}
-
 	this._overflowBlock.style.left = newLeft + 'px';
-//	console.log({
-//		event: 'MouseMoveDrag',
-//		newLeft: newLeft,
-//		units: 'px'
-//	});
 
 	var newCenterSlide = this._getCenterListItem();
 	if (!newCenterSlide) {
-//		console.warn(this.NAME + ': Center slide is not found!');
+
 	} else {
 		var newCenterSlideIndex = this._slidesArr.indexOf(newCenterSlide);
 
 		if (newCenterSlideIndex === -1) {
-//			console.warn(this.NAME + ': Center slide is not in slides Array!');
+
 		} else {
 
 			if (newCenterSlideIndex > this._slidesCount) {
 				var percentLeft = this._pixelsToPercents(newLeft);
 				newLeft = Math.abs(percentLeft) % 100;
 				this._overflowBlock.style.left = -newLeft + '%';
-//				console.log({
-//					event: 'MouseMoveDrag',
-//					newCenterSlideIndex: newCenterSlideIndex,
-//					slidesCount: this._slidesCount,
-//					newLeft: -newLeft,
-//					units: '%'
-//				});
 
 				this._startCursorXPosition = currentcursorXPosition;
-//				this._overflowStartLeft = parseInt(getComputedStyle(this._overflowBlock).left);
-//				var overflowStartLeftCompStyle = getComputedStyle(this._overflowBlock).left;
-//				this._overflowStartLeft = parseInt(overflowStartLeftCompStyle);
-//				var offsetleft = this._overflowBlock.offsetLeft;
 				this._overflowStartLeft = this._overflowBlock.offsetLeft;
-
-//				if (test) {
-//					test.innerHTML += '   newLeft = ' + -newLeft  + '%</br>';
-//					test.innerHTML += '   startCursorXPosition = ' + currentcursorXPosition  + '</br>';
-//					test.innerHTML += '   overflowStartLeft = ' + this._overflowStartLeft  + 'px</br>';
-//					test.scrollTop = test.scrollHeight;
-//				}
 
 			} else if (newCenterSlideIndex === 0) {
 				var percentLeft = this._pixelsToPercents(newLeft);
 				newLeft = Math.abs(percentLeft) + (this._slidesCount * 100);
 				this._overflowBlock.style.left = -newLeft + '%';
-//				console.log({
-//					event: 'MouseMoveDrag',
-//					newCenterSlideIndex: newCenterSlideIndex,
-//					slidesCount: this._slidesCount,
-//					newLeft: -newLeft,
-//					units: '%'
-//				});
 
 				this._startCursorXPosition = currentcursorXPosition;
-//				this._overflowStartLeft = parseInt(getComputedStyle(this._overflowBlock).left);
-//				var overflowStartLeftCompStyle = getComputedStyle(this._overflowBlock).left;
-//				this._overflowStartLeft = parseInt(overflowStartLeftCompStyle);
-//				var offsetleft = this._overflowBlock.offsetLeft;
 				this._overflowStartLeft = this._overflowBlock.offsetLeft;
-
-//				if (test) {
-//					test.innerHTML += '   newLeft = ' + -newLeft  + '%</br>';
-//					test.innerHTML += '   startCursorXPosition = ' + currentcursorXPosition  + '</br>';
-//					test.innerHTML += '   overflowStartLeft = ' + this._overflowStartLeft  + 'px</br>';
-//					test.scrollTop = test.scrollHeight;
-//				}
 			}
-//			var diff = newCenterSlideIndex - this._currSlide;
-
-//			if (diff >= 0) {
-//				this._moveSlideForward(diff);
-//			} else {
-//				this._moveSlideBack(-diff);
-//			}
 		}
 	}
 };
@@ -578,7 +449,7 @@ Slider.prototype._getCenterListItem = function() {
 	return centerElement.closest('[data-component="slide"]');
 };
 
-Slider.prototype._moveOverTime = function () {
+Slider.prototype._moveOverTime = function() {
 	this._moveTimer = setTimeout(function() {
 		if (!this._elem) return;
 		if (!this._isMoving) {
@@ -586,6 +457,25 @@ Slider.prototype._moveOverTime = function () {
 		}
 		this._moveOverTime();
 	}.bind(this), this._moveDelay);
+};
+
+Slider.prototype._onResize = function() {
+	if (this._checkScreenWidth(this._breakPoint.min, this._breakPoint.max) && !this._active) {
+		this._active = true;
+		this._initSlider();
+
+	} else if (!this._checkScreenWidth(this._breakPoint.min, this._breakPoint.max) && this._active) {
+		this._active = false;
+		this._cancelInitSlider();
+	}
+};
+
+Slider.prototype.getSlidesCount = function() {
+	return this._slidesCount;
+};
+
+Slider.prototype.getActiveSlideIndex = function() {
+	return this._currSlide;
 };
 
 try {

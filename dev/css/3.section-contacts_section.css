@@ -1,0 +1,278 @@
+.contacts_section {
+	position: relative;
+	background-image: url(../img/slide_5.jpg);
+	background-size: auto 100%;
+	background-position: center center;
+}
+
+@media screen and (min-aspect-ratio: 1400/645) {
+
+	.contacts_section {
+		background-size: 100% auto;
+	}
+
+}
+
+.contacts_section.page_slide.slide_init .page_slide_content {
+	padding: 0;
+}
+
+.contacts_section .contact_form {
+	max-width: 870px;
+	padding: 0 0;
+	position: relative;
+	margin: 0 auto;
+}
+
+.contacts_section .contact_form .row {
+	padding-bottom: 10px;
+}
+
+.contacts_section .contact_form .waiting_block {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	display: none;
+	background:
+		url(../img/spinner.gif) center center no-repeat;
+	z-index: 100;
+	top: 0;
+	left: 0;
+}
+.contacts_section .contact_form.waiting_for_response .waiting_block {
+	display: block;
+}
+
+.contacts_section .block_main_title {
+/*	font-weight: 700;*/
+	color: #f2b270;
+	font-size: 30px;
+	margin-bottom: 12px;
+	width: 100%;
+}
+
+.contacts_section .subtitle {
+	font-family: 'Old Standard TT', serif;
+	font-size: 16px;
+	color: #fff;
+	width: 100%;
+	margin-bottom: 14px;
+}
+
+.contacts_section .input_group {
+	width: 100%;
+	padding: 0 0;
+	float: left;
+	margin-bottom: 17px;
+}
+.contacts_section .input_group:last-child {
+	margin-bottom: 0;
+	margin-top: 20px;
+}
+
+.contacts_section input[type="text"],
+.contacts_section input[type="email"],
+.contacts_section textarea {
+	width: 100%;
+	resize: none;
+	font-size: 14px;
+	line-height: 1;
+	border: none;
+	border-bottom: 1px solid #382819;
+	background: none;
+	color: #fff;
+	padding: 6px 0;
+	overflow: hidden;
+	position: relative;
+	font-family: 'Old Standard TT', serif;
+}
+/*
+.contacts_section input:-webkit-autofill,
+.contacts_section textarea:-webkit-autofill,
+.contacts_section select:-webkit-autofill {
+	-webkit-animation-name: removing-webkit-autocomplete-style;
+	-webkit-animation-fill-mode: both;
+}
+*/
+.contacts_section input[type="text"]:focus,
+.contacts_section input[type="email"]:focus,
+.contacts_section textarea:focus {
+	border-color: #cd965e;
+}
+
+.contacts_section input::placeholder {opacity: 0.5; }
+.contacts_section textarea::placeholder {opacity: 0.5; }
+
+.contacts_section textarea {
+	height: 80px;
+	line-height: normal;
+}
+
+.contacts_section .submit {
+	background: transparent;
+	border-radius: 0;
+	border: 1px solid #f2b270;
+	color: #fff;
+	text-transform: uppercase;
+	font-size: 16px;
+	padding: 12px 5px;
+	width: 100%;
+	max-width: 166px;
+	font-family: 'Oswald', sans-serif;
+	letter-spacing: 0.05em;
+	transition:
+		color ease 0.5s,
+		background-color ease 0.5s,
+		border-color ease 0.5s;
+}
+
+.contacts_section .contacts {
+	justify-content: space-between;
+	align-items: flex-end;
+	max-width: 870px;
+	margin: 40px auto 0;
+}
+
+.contacts_section .contact_blocks {
+	max-width: 50%;
+}
+
+.contacts_section .contact_blocks .contact_block {
+	font-family: 'Old Standard TT', serif;
+	color: #fff;
+	font-size: 14px;
+	line-height: 2;
+	text-align: left;
+}
+
+.contacts_section .contact_blocks .contact_block a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.contacts_section .socials {
+	position: relative;
+	bottom: 8px;
+	max-width: 50%;
+}
+
+.contacts_section .socials li {
+	display: inline-block;
+}
+.contacts_section .socials li + li {
+	margin-left: 30px;
+}
+
+.contacts_section .socials li a {
+	display: block;
+	width: 30px;
+	height: 30px;
+	transform: rotate(45deg);
+/*	border: 1px solid #f2b270;*/
+	position: relative;
+	overflow: hidden;
+	font-size: 0;
+	color: transparent;
+	box-shadow:
+		inset 1px 1px 0 #f2b270,
+		inset -1px -1px 0 #f2b270;
+}
+
+.contacts_section .socials li a:before {
+	content: '';
+	position: absolute;
+	display: block;
+	height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0;
+	transform: rotate(-45deg);
+	background-repeat: no-repeat;
+	background-image: url(../img/sprites/sprite_socials.png);
+}
+.contacts_section .socials li a.facebook:before {
+	background-position: 0 0;
+}
+.contacts_section .socials li a.twitter:before {
+	background-position: -30px 0;
+}
+.contacts_section .socials li a.instagram:before{
+	background-position: -60px 0;
+}
+
+@media screen and (min-width: 768px) {
+
+	.contacts_section .input_group {
+		padding: 0 25px;
+	}
+	.contacts_section .input_group.input_name,
+	.contacts_section .input_group.input_surname,
+	.contacts_section .input_group.input_tel,
+	.contacts_section .input_group.input_mail {
+		width: 50%;
+	}
+
+	.contacts_section textarea {
+		height: 34px;
+	}
+
+	.contacts_section .row {
+		margin: 0 -30px;
+	}
+
+}
+
+@media screen and (max-width: 991px) {
+
+	.contacts_section .contact_blocks {
+		display: block;
+	}
+
+}
+
+@media screen and (min-width: 992px) {
+
+	.contacts_section.page_slide.slide_init {
+		padding-left: 85px;
+		padding-right: 85px;
+	}
+
+/*
+	.contacts_section .input_group.input_how_find {
+		order: 5;
+	}
+*/
+/*
+	.contacts_section .input_group.input_name {
+		width: 66.666666%;
+		order: 4;
+	}
+*/
+
+	.contacts_section .contacts {
+		justify-content: center;
+	}
+
+	.contacts_section .contact_blocks {
+		width: 100%;
+		max-width: none;
+	}
+
+	.contacts_section .contact_blocks .contact_block {
+		width: 33.3333333%;
+		text-align: left;
+	}
+	.contacts_section .contact_blocks .contact_block + .contact_block {
+		text-align: center;
+	}
+	.contacts_section .contact_blocks .contact_block + .contact_block + .contact_block {
+		text-align: right;
+	}
+
+	.contacts_section .socials {
+		max-width: none;
+		bottom: 0;
+		margin-top: 30px;
+	}
+
+}
