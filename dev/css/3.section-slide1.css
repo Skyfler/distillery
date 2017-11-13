@@ -62,6 +62,7 @@ body.intro_complete .slide1 .sidebar {
 	letter-spacing: 0.05em;
 	text-align: center;
 	display: none;
+	transform: translateY(-50%);
 }
 .slide1 .scroll_icon:after {
 	content: "";
@@ -151,7 +152,7 @@ body.intro_complete .slide1 .sidebar {
 	}
 
 	.slide1 .text_block {
-		margin-top: 100px;
+/*		margin-top: 100px;*/
 		margin-left: 100px;
 	}
 

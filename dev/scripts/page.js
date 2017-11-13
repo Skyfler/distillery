@@ -203,7 +203,7 @@
 
 	var slide4Elem = document.querySelector('#slide4');
 	if (slide4Elem) {
-		var pageSlide4Controller = new PageSlide4Controller({
+		window.pageSlide4Controller = new PageSlide4Controller({
 			elem: slide4Elem,
 			pageSlidesSliderActive: 'slide4'
 		});

@@ -34,8 +34,8 @@ PageSlide3Controller.prototype._init = function() {
 	this._initAnimatableElems();
 
 	this._addListener(window, 'resize', this._onResize);
-	this._addListener(this._elem.querySelector('.details'), 'click', this._onDetailsClick);
-	this._addListener(this._colLeft.querySelector('.back'), 'click', this._onBackClick);
+//	this._addListener(this._elem.querySelector('.details'), 'click', this._onDetailsClick);
+//	this._addListener(this._colLeft.querySelector('.back'), 'click', this._onBackClick);
 	this._addListener(document, 'pageSlideChangedAnimationEnd', this._onPageSlideChangedAnimationEnd);
 };
 

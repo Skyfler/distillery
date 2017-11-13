@@ -26,7 +26,7 @@ PageSlide5Controller.prototype.constructor = PageSlide5Controller;
 
 PageSlide5Controller.prototype._init = function() {
 	this._initConfigurationBlocks();
-	this._initPreviewBlock();
+//	this._initPreviewBlock();
 
 	this._addListener(this._elem, 'click', this._onClick);
 };

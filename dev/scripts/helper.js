@@ -88,6 +88,8 @@ Helper.prototype.remove = function() {
 			delete this[key];
 		}
 	}
+
+	this.__proto__ = {};
 };
 
 Helper.prototype._showErrorNotification = function() {

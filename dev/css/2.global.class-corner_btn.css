@@ -1,5 +1,9 @@
 .corner_btn {
 	position: relative;
+	transition: opacity ease 0.5s;
+}
+.corner_btn:hover {
+	opacity: 0.6;
 }
 
 .corner_btn .top_left_corner,

@@ -266,8 +266,6 @@ Slider.prototype._onCornerTransitionEnd = function(e) {
 
 	this._overflowBlock.style.transitionDuration = '0s';
 	this._overflowBlock.style.left = -100 * (this._currSlide) + '%';
-	this._slidesArr[this._slidesCount+1].classList.remove('selected');
-	this._slidesArr[0].classList.remove('selected');
 	this._isMoving = false;
 };
 

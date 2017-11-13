@@ -22,19 +22,30 @@
 	letter-spacing: 0.05em;
 	text-align: center;
 }
+body.intro_complete .intro .scroll_icon {
+	display: none;
+}
 
-.intro .scroll_icon:after {
+.intro .scroll_icon .animated_container {
 	content: "";
 	display: block;
 	width: 24px;
 	height: 66px;
 	margin: 15px auto 0;
+/*
 	background-image: url(../img/icon_scroll.png);
 	background-position: center center;
 	background-repeat: no-repeat;
+*/
 }
-body.intro_complete .intro .scroll_icon {
-	display: none;
+.intro .scroll_icon .animated_container img {
+	transition: opacity ease 0.25s;
+}
+.intro .scroll_icon .animated_container img + img {
+	opacity: 0;
+}
+.intro .scroll_icon .animated_container img.show {
+	opacity: 1;
 }
 
 .intro .top {
@@ -63,6 +74,10 @@ body.intro_complete .intro .scroll_icon {
 /*	right: 0;*/
 /*	margin: 0 auto;*/
 	display: block;
+	transition: opacity ease 0.5s;
+}
+.intro .intro_logo_container:hover {
+	opacity: 0.6;
 }
 
 .intro .intro_logo_container img {
@@ -116,6 +131,10 @@ body.intro_complete .intro .scroll_icon {
 	right: 35px;
 	transform: rotate(45deg);
 	overflow: hidden;
+	transition: opacity ease 0.5s;
+}
+.intro .menu_button:hover {
+	opacity: 0.6;
 }
 
 .intro .menu_button .center_icon {
@@ -177,6 +196,10 @@ body.intro_complete .intro .scroll_icon {
 	height: 10px;
 	transform: rotate(45deg);
 	transition: background-color ease 0.5s;
+	transition: opacity ease 0.5s;
+}
+.intro .slider_dot_controlls li.slider_dot_controll:hover {
+	opacity: 0.6;
 }
 .intro .slider_dot_controlls li.slider_dot_controll.active {
 /*.intro .slider_dot_controlls li.slider_dot_controll:hover {*/
@@ -216,4 +239,3 @@ body.intro_complete .intro .scroll_icon {
 	}
 
 }
-

@@ -22,6 +22,14 @@
 	padding: 0 30px;
 }
 
+.side_menu .side_menu_list:before,
+.side_menu .side_menu_list:after {
+	content: "";
+	padding-bottom: calc(50vh - 360px);
+	border-left: 1px solid #dda366;
+	display: none;
+}
+
 .side_menu .side_menu_list_item {
 	height: 55px;
 	position: relative;
@@ -29,6 +37,10 @@
 	text-align: right;
 	width: 100%;
 	padding-right: 60px;
+	transition: opacity ease 0.5s;
+}
+.side_menu .side_menu_list_item:hover {
+	opacity: 0.6;
 }
 
 .side_menu .side_menu_list_item_inner {
@@ -91,6 +103,11 @@
 	.side_menu .side_menu_list {
 		padding: 0;
 		height: calc(100vh - 100px - 52px);
+	}
+
+	.side_menu .side_menu_list:before,
+	.side_menu .side_menu_list:after {
+		display: block;
 	}
 
 	.side_menu .side_menu_list_item {
